@@ -30,7 +30,7 @@ namespace CarSharing.LogHandler
                 return req.CreateResponse(HttpStatusCode.OK, logs, JsonMediaTypeFormatter.DefaultMediaType);
             } else {
                 db.insert_log(message);
-                response res = new response(1, "Log Added");
+                response res = new response(1, "Log Added2");
                 return req.CreateResponse(HttpStatusCode.OK, res, JsonMediaTypeFormatter.DefaultMediaType);
             }
         }
