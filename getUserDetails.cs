@@ -27,11 +27,13 @@ namespace CarSharing.getUserDetails
                 .FirstOrDefault(q => string.Compare(q.Key, "user_id", true) == 0)
                 .Value;
 
-            string query =  "SELECT top 1 id, FirstName, LastName, email, password_enc, enc_string, licence_number FROM Users WHERE id = '"+user_id+"'";
+            string query =  "SELECT top 1 id, FirstName, LastName, email, password_enc, enc_string, licence_number FROM Users WHERE id = @user_id";
+            
             string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 SqlCommand command = new SqlCommand(query, conn);
+                command.Parameters.AddWithValue("@user_id", user_id);
                 using (SqlDataReader reader = command.ExecuteReader()) {               
                     if (reader.Read()) {
                         string user_hash = SHA.GenerateSHA256String((string)reader["password_enc"]+(string)reader["enc_string"]).ToLower();
