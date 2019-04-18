@@ -16,14 +16,14 @@ namespace CarSharing.carHandler
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
             
-
+           string sms_key = System.Environment.GetEnvironmentVariable("sms_key");
            var values = new Dictionary<string, string>
             {
                 { "from", "Guy" },
                 { "text", "Hello" },
                 { "to", "972544454162" },
                 { "api_key", "513e3c1c" },
-                { "api_secret", "***" }
+                { "api_secret", sms_key }
             };
             var content = new FormUrlEncodedContent(values);
 
