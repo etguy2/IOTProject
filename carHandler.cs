@@ -15,9 +15,14 @@ namespace CarSharing.carHandler
         
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
+            string target = req.GetQueryNameValuePairs()
+                .FirstOrDefault(q => string.Compare(q.Key, "target", true) == 0)
+                .Value;
+
             string validation_string = utilitles.RandomString(8);
             string action = "unlock";
-            sms unlock_signal =  new sms(action, "+972587559289", validation_string);
+            //+972587559289
+            sms unlock_signal =  new sms(action, target, validation_string);
             unlock_signal.send();
             return req.CreateResponse(HttpStatusCode.OK, "done");
         }
