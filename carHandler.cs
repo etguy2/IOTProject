@@ -18,9 +18,12 @@ namespace CarSharing.carHandler
             string target = req.GetQueryNameValuePairs()
                 .FirstOrDefault(q => string.Compare(q.Key, "target", true) == 0)
                 .Value;
+            string action = req.GetQueryNameValuePairs()
+                .FirstOrDefault(q => string.Compare(q.Key, "action", true) == 0)
+                .Value;
 
             string validation_string = utilitles.RandomString(8);
-            string action = "unlock";
+            //string action = "unlock";
             //+972587559289
             sms unlock_signal =  new sms(action, target, validation_string);
             unlock_signal.send();
