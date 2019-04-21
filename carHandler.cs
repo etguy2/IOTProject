@@ -27,7 +27,7 @@ namespace CarSharing.carHandler
             //+972587559289
             sms unlock_signal =  new sms(action, target, validation_string);
             unlock_signal.send();
-            return req.CreateResponse(HttpStatusCode.OK, unlock_signal._last_response);
+            return req.CreateResponse(HttpStatusCode.OK, unlock_signal._last_response + "code: " + validation_string);
         }
         private static readonly HttpClient client = new HttpClient();
     }
