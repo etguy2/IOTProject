@@ -65,7 +65,7 @@ namespace CarSharing.notify
             tReader.Close();
             dataStream.Close();
             tResponse.Close();
-            return sResponseFromServer;
+            return sResponseFromServer + " " + postData;
             
         }
     }
