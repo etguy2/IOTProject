@@ -9,7 +9,6 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using System.Collections.Generic;
-using System.Collections.Generic; 
 
 namespace CarSharing.notify
 {
@@ -39,8 +38,15 @@ namespace CarSharing.notify
             httpWebRequest.Method = "POST";
             httpWebRequest.Headers.Add(string.Format("Authorization: key={0}", SERVER_API_KEY));
             httpWebRequest.Headers.Add(string.Format("Sender: id={0}", SENDER_ID));
-           // string postData = "{\"collapse_key\":\"score_update\",\"time_to_live\":108,\"delay_while_idle\":true,\"data\": { \"message\" : \"{\"title\":\""+message+"\"}},\"time\": \"" + System.DateTime.Now.ToString() + "\"},\"registration_ids\":[\"c9-5Opvw-FU:APA91bFV7GbXMVCkPD-4dABRED3fFmpGj-gpEyAPEb2WefQEX6fO1xQ_PaMexKwRHA4huZ-pvZlpSRjA8PLcn43sgoTey1yDJNoVnjt9u7JFmuEuRocZYTnoTtuLYkgUFAHZL9t-Jp9X\"]}";
-            string postData = "{\"to\":\"c9-5Opvw-FU:APA91bFV7GbXMVCkPD-4dABRED3fFmpGj-gpEyAPEb2WefQEX6fO1xQ_PaMexKwRHA4huZ-pvZlpSRjA8PLcn43sgoTey1yDJNoVnjt9u7JFmuEuRocZYTnoTtuLYkgUFAHZL9t-Jp9X\", \"notification\":{\"title\":\""+title+"\", \"body\":\""+body+"\"}, \"data\":{\"message\":\"hello3\"}}";
+            notification_data nd = new notification_data();
+            nd.to = "c9-5Opvw-FU:APA91bFV7GbXMVCkPD-4dABRED3fFmpGj-gpEyAPEb2WefQEX6fO1xQ_PaMexKwRHA4huZ-pvZlpSRjA8PLcn43sgoTey1yDJNoVnjt9u7JFmuEuRocZYTnoTtuLYkgUFAHZL9t-Jp9X";
+            nd.notification.title = title;
+            nd.notification.body = body;
+            nd.data.action = 1;
+            nd.data.message = "Inner Message";
+            string postData = Newtonsoft.Json.JsonConvert.SerializeObject(nd);
+            // string postData = "{\"collapse_key\":\"score_update\",\"time_to_live\":108,\"delay_while_idle\":true,\"data\": { \"message\" : \"{\"title\":\""+message+"\"}},\"time\": \"" + System.DateTime.Now.ToString() + "\"},\"registration_ids\":[\"c9-5Opvw-FU:APA91bFV7GbXMVCkPD-4dABRED3fFmpGj-gpEyAPEb2WefQEX6fO1xQ_PaMexKwRHA4huZ-pvZlpSRjA8PLcn43sgoTey1yDJNoVnjt9u7JFmuEuRocZYTnoTtuLYkgUFAHZL9t-Jp9X\"]}";
+            //string postData = "{\"to\":\"c9-5Opvw-FU:APA91bFV7GbXMVCkPD-4dABRED3fFmpGj-gpEyAPEb2WefQEX6fO1xQ_PaMexKwRHA4huZ-pvZlpSRjA8PLcn43sgoTey1yDJNoVnjt9u7JFmuEuRocZYTnoTtuLYkgUFAHZL9t-Jp9X\", \"notification\":{\"title\":\""+title+"\", \"body\":\""+body+"\"}, \"data\":{\"message\":\"hello3\"}}";
             Byte[] byteArray = Encoding.UTF8.GetBytes(postData);
             httpWebRequest.ContentLength = byteArray.Length;
     
@@ -62,12 +68,6 @@ namespace CarSharing.notify
             return sResponseFromServer;
             
         }
-        private class NotificationMessage
-	    {
-            public string Title;
-            public string Message;
-            public long ItemId;
-	    }
     }
     
 }
