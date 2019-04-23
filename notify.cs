@@ -9,7 +9,6 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using System.Collections.Generic;
-using System.Web.Extensions;
 using System.Collections.Generic; 
 
 namespace CarSharing.notify
