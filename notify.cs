@@ -18,8 +18,8 @@ namespace CarSharing.notify
         [FunctionName("notify")]
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
-            sendPush("Yo");
-            return req.CreateResponse(HttpStatusCode.OK, "Hello ");
+            //sendPush("Yo");
+            return req.CreateResponse(HttpStatusCode.OK, sendPush("Yo"));
         }
         private static readonly HttpClient client = new HttpClient();
         public static string sendPush(string message)
