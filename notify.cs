@@ -19,10 +19,16 @@ namespace CarSharing.notify
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
             //sendPush("Yo");
-            return req.CreateResponse(HttpStatusCode.OK, sendPush("Yo"));
+            string title = req.GetQueryNameValuePairs()
+                .FirstOrDefault(q => string.Compare(q.Key, "title", true) == 0)
+                .Value;
+            string body = req.GetQueryNameValuePairs()
+                .FirstOrDefault(q => string.Compare(q.Key, "body", true) == 0)
+                .Value;
+            return req.CreateResponse(HttpStatusCode.OK, sendPush(title, body));
         }
         private static readonly HttpClient client = new HttpClient();
-        public static string sendPush(string message)
+        public static string sendPush(string title, string body)
         {
  
             var SERVER_API_KEY = System.Environment.GetEnvironmentVariable("server_api_key");
@@ -34,7 +40,7 @@ namespace CarSharing.notify
             httpWebRequest.Headers.Add(string.Format("Authorization: key={0}", SERVER_API_KEY));
             httpWebRequest.Headers.Add(string.Format("Sender: id={0}", SENDER_ID));
            // string postData = "{\"collapse_key\":\"score_update\",\"time_to_live\":108,\"delay_while_idle\":true,\"data\": { \"message\" : \"{\"title\":\""+message+"\"}},\"time\": \"" + System.DateTime.Now.ToString() + "\"},\"registration_ids\":[\"c9-5Opvw-FU:APA91bFV7GbXMVCkPD-4dABRED3fFmpGj-gpEyAPEb2WefQEX6fO1xQ_PaMexKwRHA4huZ-pvZlpSRjA8PLcn43sgoTey1yDJNoVnjt9u7JFmuEuRocZYTnoTtuLYkgUFAHZL9t-Jp9X\"]}";
-            string postData = "{\"to\":\"c9-5Opvw-FU:APA91bFV7GbXMVCkPD-4dABRED3fFmpGj-gpEyAPEb2WefQEX6fO1xQ_PaMexKwRHA4huZ-pvZlpSRjA8PLcn43sgoTey1yDJNoVnjt9u7JFmuEuRocZYTnoTtuLYkgUFAHZL9t-Jp9X\", \"notification\":{\"title\":\"hello\", \"body\":\"hello2\"}, \"data\":{\"message\":\"hello3\"}}";
+            string postData = "{\"to\":\"c9-5Opvw-FU:APA91bFV7GbXMVCkPD-4dABRED3fFmpGj-gpEyAPEb2WefQEX6fO1xQ_PaMexKwRHA4huZ-pvZlpSRjA8PLcn43sgoTey1yDJNoVnjt9u7JFmuEuRocZYTnoTtuLYkgUFAHZL9t-Jp9X\", \"notification\":{\"title\":\""+title+"\", \"body\":\""+body+"\"}, \"data\":{\"message\":\"hello3\"}}";
             Byte[] byteArray = Encoding.UTF8.GetBytes(postData);
             httpWebRequest.ContentLength = byteArray.Length;
     
