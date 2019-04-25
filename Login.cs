@@ -33,7 +33,7 @@ namespace CarSharing.Login
 
             // Get user from the DB
             string input_pass = SHA.GenerateSHA256String(password).ToLower(); // Encrypc input_password (SHA256)
-            string query =  "SELECT top 1 password_enc, enc_string, id FROM Users WHERE email = '@email'";
+            string query =  "SELECT top 1 password_enc, enc_string, id FROM Users WHERE email = @email";
             
             login_response res = new login_response(-1, 0, null); // Default bad login response
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
@@ -45,7 +45,7 @@ namespace CarSharing.Login
                     if (reader.Read()) {  
                         if (string.Compare(input_pass, (string)reader["password_enc"]) == 0) { // Checks if the 2 encrypted passwords match.
                             login_success = true;
-                            string update_token_query =  "UPDATE Users SET notification_token = '@notification_token' WHERE id = @user_id";
+                            string update_token_query =  "UPDATE Users SET notification_token = @notification_token WHERE id = @user_id";
                             SqlCommand update_token_cmd = new SqlCommand(update_token_query, conn);
                             update_token_cmd.Parameters.AddWithValue("@notification_token", notification_token);
                             update_token_cmd.Parameters.AddWithValue("@user_id", (int)reader["id"]);
