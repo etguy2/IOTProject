@@ -41,8 +41,7 @@ namespace CarSharing.Login
                 conn.Open();
                 SqlCommand get_cmd = new SqlCommand(query, conn);
                 get_cmd.Prepare();
-                get_cmd.Parameters.Add("@email", SqlDbType.Text).Value = email;
-                get_cmd.Parameters.AddWithValue("@email", email);
+                get_cmd.Parameters.Add("@email", SqlDbType.Text).Value = email; 
                 string enc_string = utilitles.RandomString(5); // Generate a new enc_string.
                 using (SqlDataReader reader = get_cmd.ExecuteReader()) {
                     if (reader.Read()) {  
