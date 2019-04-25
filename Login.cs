@@ -34,14 +34,15 @@ namespace CarSharing.Login
 
             // Get user from the DB
             string input_pass = SHA.GenerateSHA256String(password).ToLower(); // Encrypc input_password (SHA256)
-            string query =  "SELECT top 1 password_enc, enc_string, id FROM Users WHERE email = @email";
+            string query =  "SELECT top 1 password_enc, enc_string, id FROM Users WHERE email = '@email'";
             
             login_response res = new login_response(-1, 0, null); // Default bad login response
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 SqlCommand get_cmd = new SqlCommand(query, conn);
                 get_cmd.Prepare();
-                get_cmd.Parameters.Add("@email", SqlDbType.Text).Value = email; 
+                get_cmd.Parameters.Add("@email", SqlDbType.NVarChar, 50);
+                get_cmd.Parameters["@email"].Value = email; 
                 string enc_string = utilitles.RandomString(5); // Generate a new enc_string.
                 using (SqlDataReader reader = get_cmd.ExecuteReader()) {
                     if (reader.Read()) {  
@@ -50,8 +51,10 @@ namespace CarSharing.Login
                             string update_token_query =  "UPDATE Users SET notification_token = '@notification_token' WHERE id = @user_id";
                             SqlCommand update_token_cmd = new SqlCommand(update_token_query, conn);
                             update_token_cmd.Prepare();
-                            update_token_cmd.Parameters.Add("@notification_token", SqlDbType.Text).Value = notification_token;
-                            update_token_cmd.Parameters.Add("@user_id", SqlDbType.Int).Value = (int)reader["id"];
+                            update_token_cmd.Parameters.Add("@notification_token", SqlDbType.NVarChar, 50);
+                            update_token_cmd.Parameters["@notification_token"].Value = notification_token;
+                            update_token_cmd.Parameters.Add("@user_id", SqlDbType.Int);
+                            update_token_cmd.Parameters["@user_id"].Value = (int)reader["id"];
                             update_token_cmd.ExecuteNonQuery();
                             string login_hash = SHA.GenerateSHA256String(input_pass+enc_string).ToLower(); // Generate login hash.
                             res = new login_response(1, (int)reader["id"], login_hash); // Generate login response.
