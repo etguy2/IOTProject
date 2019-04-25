@@ -71,6 +71,7 @@ namespace CarSharing.Login
                     SqlParameter param_uid  = new SqlParameter();
 			        param_uid.ParameterName = "@user_id";
 			        param_uid.Value = user_id;
+                    update_token_cmd.Parameters.Add(param_uid);
                     update_token_cmd.ExecuteNonQuery();
                 }
                 conn.Close();
