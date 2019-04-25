@@ -33,6 +33,7 @@ namespace CarSharing.Login
             bool login_success = false;
 
             // Get user from the DB
+            int user_id = 0;
             string input_pass = SHA.GenerateSHA256String(password).ToLower(); // Encrypc input_password (SHA256)
             string query =  "SELECT top 1 password_enc, enc_string, id FROM Users WHERE email = @email";
             
@@ -43,21 +44,14 @@ namespace CarSharing.Login
                 get_cmd.Prepare();
                 SqlParameter param  = new SqlParameter();
 			    param.ParameterName = "@email";
-			    param.Value         = "yuvalfreund93@gmail.com";
+			    param.Value         = email;
                 get_cmd.Parameters.Add(param);
                 string enc_string = utilitles.RandomString(5); // Generate a new enc_string.
                 using (SqlDataReader reader = get_cmd.ExecuteReader()) {
                     if (reader.Read()) {  
                         if (string.Compare(input_pass, (string)reader["password_enc"]) == 0) { // Checks if the 2 encrypted passwords match.
                             login_success = true;
-                            // string update_token_query =  "UPDATE Users SET notification_token = '@notification_token' WHERE id = @user_id";
-                            // SqlCommand update_token_cmd = new SqlCommand(update_token_query, conn);
-                            // update_token_cmd.Prepare();
-                            // update_token_cmd.Parameters.Add("@notification_token", SqlDbType.NVarChar, 50);
-                            // update_token_cmd.Parameters["@notification_token"].Value = notification_token;
-                            // update_token_cmd.Parameters.Add("@user_id", SqlDbType.Int);
-                            // update_token_cmd.Parameters["@user_id"].Value = (int)reader["id"];
-                            //update_token_cmd.ExecuteNonQuery();
+                            user_id = (int)reader["id"];
                             string login_hash = SHA.GenerateSHA256String(input_pass+enc_string).ToLower(); // Generate login hash.
                             res = new login_response(1, (int)reader["id"], login_hash); // Generate login response.
                         }   
@@ -67,6 +61,17 @@ namespace CarSharing.Login
                     string update_enc_string =  "UPDATE Users SET enc_string = '"+enc_string+"' WHERE email = '"+email+"'"; 
                     SqlCommand update_cmd = new SqlCommand(update_enc_string, conn);
                     update_cmd.ExecuteNonQuery();
+                    string update_token_query =  "UPDATE Users SET notification_token = @notification_token WHERE id = @user_id";
+                    SqlCommand update_token_cmd = new SqlCommand(update_token_query, conn);
+                    update_token_cmd.Prepare();
+                    SqlParameter param_token  = new SqlParameter();
+			        param_token.ParameterName = "@notification_token";
+			        param_token.Value = notification_token;
+                    update_token_cmd.Parameters.Add(param_token);
+                    SqlParameter param_uid  = new SqlParameter();
+			        param_uid.ParameterName = "@user_id";
+			        param_uid.Value = user_id;
+                    update_token_cmd.ExecuteNonQuery();
                 }
                 conn.Close();
             }
