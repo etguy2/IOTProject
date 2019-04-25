@@ -40,6 +40,7 @@ namespace CarSharing.Login
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 SqlCommand get_cmd = new SqlCommand(query, conn);
+                get_cmd.Prepare();
                 SqlParameter param  = new SqlParameter();
 			    param.ParameterName = "@email";
 			    param.Value         = "yuvalfreund93@gmail.com";
