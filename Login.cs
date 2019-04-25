@@ -34,16 +34,16 @@ namespace CarSharing.Login
 
             // Get user from the DB
             string input_pass = SHA.GenerateSHA256String(password).ToLower(); // Encrypc input_password (SHA256)
-            string query =  "SELECT top 1 password_enc, enc_string, id FROM Users WHERE email = 'yuvalfreund93@gmail.com'";
+            string query =  "SELECT top 1 password_enc, enc_string, id FROM Users WHERE email = '@email'";
             
             login_response res = new login_response(-1, 0, null); // Default bad login response
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 SqlCommand get_cmd = new SqlCommand(query, conn);
-                // SqlParameter param  = new SqlParameter();
-			    // param.ParameterName = "@email";
-			    // param.Value         = "yuvalfreund93@gmail.com";
-                // get_cmd.Parameters.Add(param);
+                SqlParameter param  = new SqlParameter();
+			    param.ParameterName = "@email";
+			    param.Value         = "yuvalfreund93@gmail.com";
+                get_cmd.Parameters.Add(param);
                 string enc_string = utilitles.RandomString(5); // Generate a new enc_string.
                 using (SqlDataReader reader = get_cmd.ExecuteReader()) {
                     if (reader.Read()) {  
