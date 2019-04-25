@@ -49,14 +49,14 @@ namespace CarSharing.Login
                     if (reader.Read()) {  
                         if (string.Compare(input_pass, (string)reader["password_enc"]) == 0) { // Checks if the 2 encrypted passwords match.
                             login_success = true;
-                            string update_token_query =  "UPDATE Users SET notification_token = '@notification_token' WHERE id = @user_id";
-                            SqlCommand update_token_cmd = new SqlCommand(update_token_query, conn);
-                            update_token_cmd.Prepare();
-                            update_token_cmd.Parameters.Add("@notification_token", SqlDbType.NVarChar, 50);
-                            update_token_cmd.Parameters["@notification_token"].Value = notification_token;
-                            update_token_cmd.Parameters.Add("@user_id", SqlDbType.Int);
-                            update_token_cmd.Parameters["@user_id"].Value = (int)reader["id"];
-                            update_token_cmd.ExecuteNonQuery();
+                            // string update_token_query =  "UPDATE Users SET notification_token = '@notification_token' WHERE id = @user_id";
+                            // SqlCommand update_token_cmd = new SqlCommand(update_token_query, conn);
+                            // update_token_cmd.Prepare();
+                            // update_token_cmd.Parameters.Add("@notification_token", SqlDbType.NVarChar, 50);
+                            // update_token_cmd.Parameters["@notification_token"].Value = notification_token;
+                            // update_token_cmd.Parameters.Add("@user_id", SqlDbType.Int);
+                            // update_token_cmd.Parameters["@user_id"].Value = (int)reader["id"];
+                            //update_token_cmd.ExecuteNonQuery();
                             string login_hash = SHA.GenerateSHA256String(input_pass+enc_string).ToLower(); // Generate login hash.
                             res = new login_response(1, (int)reader["id"], login_hash); // Generate login response.
                         }   
