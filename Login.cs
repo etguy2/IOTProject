@@ -40,10 +40,10 @@ namespace CarSharing.Login
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 SqlCommand get_cmd = new SqlCommand(query, conn);
-                SqlParameter param  = new SqlParameter();
-			    param.ParameterName = "@email";
-			    param.Value         = "yuvalfreund93@gmail.com";
-                get_cmd.Parameters.Add(param);
+                // SqlParameter param  = new SqlParameter();
+			    // param.ParameterName = "@email";
+			    // param.Value         = "yuvalfreund93@gmail.com";
+                // get_cmd.Parameters.Add(param);
                 string enc_string = utilitles.RandomString(5); // Generate a new enc_string.
                 using (SqlDataReader reader = get_cmd.ExecuteReader()) {
                     if (reader.Read()) {  
