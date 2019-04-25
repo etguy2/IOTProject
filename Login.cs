@@ -34,7 +34,7 @@ namespace CarSharing.Login
 
             // Get user from the DB
             string input_pass = SHA.GenerateSHA256String(password).ToLower(); // Encrypc input_password (SHA256)
-            string query =  "SELECT top 1 password_enc, enc_string, id FROM Users WHERE email = @email";
+            string query =  "SELECT top 1 password_enc, enc_string, id FROM Users WHERE email = '@email'";
             
             login_response res = new login_response(-1, 0, null); // Default bad login response
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
