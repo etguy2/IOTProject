@@ -28,9 +28,13 @@ namespace CarSharing.getAvailableCars
             c1.id = "3476934";
             c1.lat = "32.778052";
             c1.lng = "35.021980";
+            c1.Manufacturer = "Hyundai";
+            c1.mode = 1;
             c2.id = "3477734";
             c2.lat = "32.778205";
             c2.lng = "35.021779";
+            c2.Manufacturer = "Kia";
+            c2.mode = 1;
 
             cars.Add(c1);
             cars.Add(c2);
@@ -44,6 +48,9 @@ namespace CarSharing.getAvailableCars
             public string id;
             public string lat;
             public string lng;
+            public string Manufacturer;
+
+            public int mode;
         }
     }
 }
