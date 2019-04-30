@@ -25,7 +25,7 @@ public struct car {
         this.img = (!utilitles.isKeyExist(reader, "carimage") && reader["carimage"] != DBNull.Value) ? (string)reader["carimage"] : string.Empty;
         this.user = new user(); 
         this.user.id = (int)reader["ownerid"];
-        this.user.email = (string)reader["owneremail"]; 
+        this.user.email = (string)reader["owneremail"];  
         this.user.first_name = (string)reader["owner_first_name"];
         this.user.last_name = (string)reader["owner_last_name"];
     }
