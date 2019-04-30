@@ -21,7 +21,7 @@ namespace CarSharing.getAvailableCars
             string name = req.GetQueryNameValuePairs()
                 .FirstOrDefault(q => string.Compare(q.Key, "name", true) == 0)
                 .Value;
-            string get_cars_query =  "SELECT Devices.id as deviceid, Devices.lat, Devices.lng, "
+            string get_cars_query =  "SELECT Vehicles.id as deviceid, Devices.lat, Devices.lng, "
                 +"Vehicles.model, Users.email as owneremail, Users.id as ownerid,  Vehicles.manufacturer "
                 +"FROM Devices "
                 +"INNER JOIN Vehicles ON Vehicles.device_id = Devices.id "
@@ -52,7 +52,7 @@ namespace CarSharing.getAvailableCars
             public int id;
             public string lat;
             public string lng;
-            public string Manufacturer;
+            public string manufacturer;
 
             public int mode;
             public string model;
@@ -60,10 +60,10 @@ namespace CarSharing.getAvailableCars
             public user user;
 
             public car(SqlDataReader reader) {
-                this.id = (int)reader["deviceid"];
+                this.id = (int)reader["id"];
                 this.lat = (string)reader["lat"];
                 this.lng = (string)reader["lng"];
-                this.Manufacturer = (string)reader["manufacturer"];
+                this.manufacturer = (string)reader["manufacturer"];
                 this.mode = (int)reader["mode"];
                 this.model = (string)reader["model"];
                 this.user.id = (int)reader["ownerid"];
