@@ -22,11 +22,11 @@ public struct car {
         this.manufacturer = (string)reader["manufacturer"];
         this.mode = (int)reader["mode"];
         this.model = (string)reader["model"];
-        this.img = (string)reader["carimage"];
+        this.img = (reader["carimage"] != null) ? (string)reader["carimage"] : "";
         this.user = new user();
         this.user.id = (int)reader["ownerid"];
         this.user.email = (string)reader["owneremail"]; 
-        this.user.first_name = (string)reader["user_first_name"];
-        this.user.last_name = (string)reader["user_last_name"];
+        this.user.first_name = (string)reader["owner_first_name"];
+        this.user.last_name = (string)reader["owner_last_name"];
     }
 }
