@@ -5,6 +5,7 @@ using System.Linq;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Data.SqlClient;
 
 public static class utilitles {
     private static Random random = new Random();
@@ -13,6 +14,15 @@ public static class utilitles {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         return new string(Enumerable.Repeat(chars, length)
         .Select(s => s[random.Next(s.Length)]).ToArray());
+    }
+    public static bool isKeyExist(SqlDataReader reader, string columnName) {
+        for (int i=0; i < reader.FieldCount; i++)
+        {
+            
+            if (reader.GetName(i).Equals(columnName,StringComparison.InvariantCultureIgnoreCase))
+                return true;
+        }
+        return false; 
     }
     public static Image CropImage(Image img) {
         int x = img.Width/2;
