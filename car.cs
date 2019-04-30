@@ -22,8 +22,8 @@ public struct car {
         this.manufacturer = (string)reader["manufacturer"];
         this.mode = (int)reader["mode"];
         this.model = (string)reader["model"];
-        this.img = (reader["carimage"] != DBNull.Value && !utilitles.isKeyExist(reader, "carimage")) ? (string)reader["carimage"] : string.Empty;
-        this.user = new user();
+        this.img = (!utilitles.isKeyExist(reader, "carimage") && reader["carimage"] != DBNull.Value) ? (string)reader["carimage"] : string.Empty;
+        this.user = new user(); 
         this.user.id = (int)reader["ownerid"];
         this.user.email = (string)reader["owneremail"]; 
         this.user.first_name = (string)reader["owner_first_name"];
