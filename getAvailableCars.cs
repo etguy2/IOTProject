@@ -22,7 +22,7 @@ namespace CarSharing.getAvailableCars
                 .FirstOrDefault(q => string.Compare(q.Key, "name", true) == 0)
                 .Value;
             string get_cars_query =  "SELECT Vehicles.id as id, Devices.lat, Devices.lng, "
-                +"Vehicles.model, Vehicles.mode, Users.email as owneremail, Users.id as ownerid,  Vehicles.manufacturer "
+                +"Vehicles.model, Vehicles.mode, Users.id as ownerid,  Vehicles.manufacturer "
                 +"FROM Devices "
                 +"INNER JOIN Vehicles ON Vehicles.device_id = Devices.id "
                 +"INNER JOIN Users ON Users.id = Vehicles.owner_id";
@@ -46,7 +46,6 @@ namespace CarSharing.getAvailableCars
         }
         public struct user {
             public int id;
-            public string email;
         }
         public struct car {
             public int id;
@@ -67,7 +66,7 @@ namespace CarSharing.getAvailableCars
                 this.mode = (int)reader["mode"];
                 this.model = (string)reader["model"];
                 this.user.id = (int)reader["ownerid"];
-                this.user.email = (string)reader["owneremail"];
+                //this.user.email = (string)reader["owneremail"];
             }
         }
     }
