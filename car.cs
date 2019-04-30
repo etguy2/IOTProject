@@ -13,10 +13,13 @@ public struct car {
     public int mode;
     public string model;
 
+    public int year;
+
     public user user;
 
     public car(SqlDataReader reader) {
         this.id = (int)reader["id"];
+        this.year = (int)reader["year"];
         this.lat = (string)reader["lat"];
         this.lng = (string)reader["lng"];
         this.manufacturer = (string)reader["manufacturer"];
