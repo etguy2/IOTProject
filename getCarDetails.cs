@@ -33,6 +33,7 @@ namespace CarSharing.getCarDetails
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 SqlCommand command = new SqlCommand(get_car_query, conn);
+                command.Parameters.AddWithValue("@vehicle_id", vehicle_id);
                 using (SqlDataReader reader = command.ExecuteReader()) {               
                     if (reader.Read()) {
                         car = new car(reader);
