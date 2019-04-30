@@ -28,7 +28,7 @@ namespace CarSharing.getCarDetails
 
             string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
             bool success = false;
-            car car = new car();
+            car_full car;
             response bad_response = new response(-1, "bad car id");
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
@@ -36,7 +36,7 @@ namespace CarSharing.getCarDetails
                 command.Parameters.AddWithValue("@vehicle_id", vehicle_id);
                 using (SqlDataReader reader = command.ExecuteReader()) {               
                     if (reader.Read()) {
-                        car = new car(reader);
+                        car = new car_full(reader);
                         success = true;
                     }
                 }

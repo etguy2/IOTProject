@@ -29,13 +29,13 @@ namespace CarSharing.getAvailableCars
 
             // Task vars 
             string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
-            List<car> cars = new List<car>();
+            List<car_partial> cars = new List<car_partial>();
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 SqlCommand command = new SqlCommand(get_cars_query, conn);
                 using (SqlDataReader reader = command.ExecuteReader()) {                
                     while (reader.Read()) {
-                        cars.Add(new car(reader));
+                        cars.Add(new car_partial(reader));
                     }
                 }
                 conn.Close();

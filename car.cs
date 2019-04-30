@@ -3,21 +3,18 @@ using System.Text;
 using System.Linq;
 using System.Net.Http.Formatting;
 using System.Data.SqlClient;
-public struct car {
+
+public class car_partial {
     public int id;
     public string lat;
     public string lng;
     public string manufacturer;
-    public string img;
 
     public int mode;
     public string model;
 
     public int year;
-
-    public user user;
-
-    public car(SqlDataReader reader) {
+    public car_partial(SqlDataReader reader) { 
         this.id = (int)reader["id"];
         this.year = (int)reader["year"];
         this.lat = (string)reader["lat"];
@@ -25,6 +22,14 @@ public struct car {
         this.manufacturer = (string)reader["manufacturer"];
         this.mode = (int)reader["mode"];
         this.model = (string)reader["model"];
+    }
+}
+public class car_full : car_partial {
+    public string img;
+
+    public user user;
+
+    public car_full(SqlDataReader reader) : base(reader) {
         this.img = utilitles.safeCast(reader, "carimage");
         this.user = new user(); 
         this.user.id = (int)reader["ownerid"];
