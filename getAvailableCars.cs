@@ -22,7 +22,7 @@ namespace CarSharing.getAvailableCars
                 .FirstOrDefault(q => string.Compare(q.Key, "name", true) == 0)
                 .Value;
             string get_cars_query =  "SELECT Vehicles.id as id, Devices.lat, Devices.lng, "
-                +"Vehicles.model, Vehicles.mode, Users.id as ownerid,  Vehicles.manufacturer "
+                +"Vehicles.model, Vehicles.mode, Users.id as ownerid, Vehicles.manufacturer "
                 +"FROM Devices "
                 +"INNER JOIN Vehicles ON Vehicles.device_id = Devices.id "
                 +"INNER JOIN Users ON Users.id = Vehicles.owner_id";
@@ -43,31 +43,6 @@ namespace CarSharing.getAvailableCars
             
 
             return req.CreateResponse(HttpStatusCode.OK, cars, JsonMediaTypeFormatter.DefaultMediaType);
-        }
-        public struct user {
-            public int id;
-        }
-        public struct car {
-            public int id;
-            public string lat;
-            public string lng;
-            public string manufacturer;
-
-            public int mode;
-            public string model;
-
-            public user user;
-
-            public car(SqlDataReader reader) {
-                this.id = (int)reader["id"];
-                this.lat = (string)reader["lat"];
-                this.lng = (string)reader["lng"];
-                this.manufacturer = (string)reader["manufacturer"];
-                this.mode = (int)reader["mode"];
-                this.model = (string)reader["model"];
-                this.user.id = (int)reader["ownerid"];
-                //this.user.email = (string)reader["owneremail"];
-            }
         }
     }
 }
