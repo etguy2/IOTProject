@@ -14,6 +14,7 @@ public class car_partial {
     public string model;
 
     public int year;
+    public car_partial() {}
     public car_partial(SqlDataReader reader) { 
         this.id = (int)reader["id"];
         this.year = (int)reader["year"];
@@ -29,6 +30,7 @@ public class car_full : car_partial {
 
     public user user;
 
+    public car_full() {}
     public car_full(SqlDataReader reader) : base(reader) {
         this.img = utilitles.safeCast(reader, "carimage");
         this.user = new user(); 

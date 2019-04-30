@@ -28,7 +28,7 @@ namespace CarSharing.getCarDetails
 
             string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
             bool success = false;
-            car_full car;
+            car_full car = new car_full();
             response bad_response = new response(-1, "bad car id");
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
