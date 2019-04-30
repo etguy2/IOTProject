@@ -37,6 +37,7 @@ namespace CarSharing.getCarDetails
                 using (SqlDataReader reader = command.ExecuteReader()) {               
                     if (reader.Read()) {
                         car = new car(reader);
+                        success = true;
                     }
                 }
                 conn.Close();
