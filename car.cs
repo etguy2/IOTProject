@@ -26,7 +26,7 @@ public struct car {
         this.user = new user(); 
         this.user.id = (int)reader["ownerid"];
         this.user.email = utilitles.safeCast(reader, "owneremail");
-        this.user.first_name = (string)reader["owner_first_name"];
-        this.user.last_name = (string)reader["owner_last_name"];
+        this.user.first_name = utilitles.safeCast(reader, "owner_first_name");
+        this.user.last_name = utilitles.safeCast(reader, "owner_last_name");
     }
 }
