@@ -22,9 +22,9 @@ namespace CarSharing.getAvailableCars
                 .FirstOrDefault(q => string.Compare(q.Key, "name", true) == 0)
                 .Value;
             string get_cars_query =  "SELECT Devices.id as deviceid, Devices.lat, Devices.lng,"
-                +"Vehicles.model, Users.email as owneremail, Users.id as ownerid,  Vehicles.manufacturer"
-                +"FROM Devices"
-                +"INNER JOIN Vehicles ON Vehicles.device_id = Devices.id"
+                +"Vehicles.model, Users.email as owneremail, Users.id as ownerid,  Vehicles.manufacturer "
+                +"FROM Devices "
+                +"INNER JOIN Vehicles ON Vehicles.device_id = Devices.id "
                 +"INNER JOIN Users ON Users.id = Vehicles.owner_id";
 
             // Task vars 
@@ -33,11 +33,11 @@ namespace CarSharing.getAvailableCars
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 SqlCommand command = new SqlCommand(get_cars_query, conn);
-                    using (SqlDataReader reader = command.ExecuteReader()) {               
-                        while (reader.Read()) {
-                            cars.Add(new car(reader));
-                        }
+                using (SqlDataReader reader = command.ExecuteReader()) {               
+                    while (reader.Read()) {
+                        cars.Add(new car(reader));
                     }
+                }
                 conn.Close();
              }
             
