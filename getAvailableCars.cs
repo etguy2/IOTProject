@@ -33,7 +33,7 @@ namespace CarSharing.getAvailableCars
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 SqlCommand command = new SqlCommand(get_cars_query, conn);
-                using (SqlDataReader reader = command.ExecuteReader()) {               
+                using (SqlDataReader reader = command.ExecuteReader()) {                
                     while (reader.Read()) {
                         cars.Add(new car(reader));
                     }
