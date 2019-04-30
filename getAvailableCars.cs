@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using System.Collections.Generic;
 using System.Net.Http.Formatting;
+using System.Data.SqlClient;
 
 namespace CarSharing.getAvailableCars
 {
@@ -20,37 +21,54 @@ namespace CarSharing.getAvailableCars
             string name = req.GetQueryNameValuePairs()
                 .FirstOrDefault(q => string.Compare(q.Key, "name", true) == 0)
                 .Value;
+            string get_cars_query =  "SELECT Devices.id as deviceid, Devices.lat, Devices.lng,"
+                +"Vehicles.model, Users.email as owneremail, Users.id as ownerid,  Vehicles.manufacturer"
+                +"FROM Devices"
+                +"INNER JOIN Vehicles ON Vehicles.device_id = Devices.id"
+                +"INNER JOIN Users ON Users.id = Vehicles.owner_id";
 
-            car c1;
-            car c2;
+            // Task vars 
+            string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
             List<car> cars = new List<car>();
-
-            c1.id = "3476934";
-            c1.lat = "32.778052";
-            c1.lng = "35.021980";
-            c1.Manufacturer = "Hyundai";
-            c1.mode = 1;
-            c2.id = "3477734";
-            c2.lat = "32.778205";
-            c2.lng = "35.021779";
-            c2.Manufacturer = "Kia";
-            c2.mode = 1;
-
-            cars.Add(c1);
-            cars.Add(c2);
-
-
+            using (SqlConnection conn = new SqlConnection(_conn_str)) {
+                conn.Open();
+                SqlCommand command = new SqlCommand(get_cars_query, conn);
+                    using (SqlDataReader reader = command.ExecuteReader()) {               
+                        while (reader.Read()) {
+                            cars.Add(new car(reader));
+                        }
+                    }
+                conn.Close();
+             }
             
 
             return req.CreateResponse(HttpStatusCode.OK, cars, JsonMediaTypeFormatter.DefaultMediaType);
         }
+        public struct user {
+            public int id;
+            public string email;
+        }
         public struct car {
-            public string id;
+            public int id;
             public string lat;
             public string lng;
             public string Manufacturer;
 
             public int mode;
+            public string model;
+
+            public user user;
+
+            public car(SqlDataReader reader) {
+                this.id = (int)reader["id"];
+                this.lat = (string)reader["lat"];
+                this.lng = (string)reader["lng"];
+                this.Manufacturer = (string)reader["manufacturer"];
+                this.mode = (int)reader["mode"];
+                this.model = (string)reader["model"];
+                this.user.id = (int)reader["ownerid"];
+                this.user.email = (string)reader["owneremail"];
+            }
         }
     }
 }
