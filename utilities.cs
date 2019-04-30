@@ -24,6 +24,10 @@ public static class utilitles {
         }
         return false; 
     }
+
+    public static string safeCast(SqlDataReader reader, string slot_name) {
+        return (utilitles.isKeyExist(reader, slot_name) && reader[slot_name] != DBNull.Value) ? (string)reader[slot_name] : string.Empty;
+    }
     public static Image CropImage(Image img) {
         int x = img.Width/2;
         int y = img.Height/2;

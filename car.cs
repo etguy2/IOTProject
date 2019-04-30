@@ -22,10 +22,10 @@ public struct car {
         this.manufacturer = (string)reader["manufacturer"];
         this.mode = (int)reader["mode"];
         this.model = (string)reader["model"];
-        this.img = (utilitles.isKeyExist(reader, "carimage") && reader["carimage"] != DBNull.Value) ? (string)reader["carimage"] : string.Empty;
+        this.img = utilitles.safeCast(reader, "carimage");
         this.user = new user(); 
         this.user.id = (int)reader["ownerid"];
-        this.user.email = (string)reader["owneremail"];  
+        this.user.email = utilitles.safeCast(reader, "owneremail");
         this.user.first_name = (string)reader["owner_first_name"];
         this.user.last_name = (string)reader["owner_last_name"];
     }
