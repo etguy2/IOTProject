@@ -42,7 +42,7 @@ namespace CarSharing.getUserDetails
                                 (string)reader["FirstName"],
                                 (string)reader["LastName"], 
                                 (string)reader["email"],
-                                (string)reader["licence_number"]);
+                                (string)reader["licence_number"], "");
                                 return req.CreateResponse(HttpStatusCode.OK, usr, JsonMediaTypeFormatter.DefaultMediaType);
                         } else {
                             response res = new response(-1, "Bad Login Hash");
