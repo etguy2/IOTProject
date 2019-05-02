@@ -21,7 +21,7 @@ namespace CarSharing.getCarDetails
                 .Value;
 
             string get_car_query =  "SELECT Vehicles.id as id, Devices.lat, Vehicles.prod_year as year, Devices.lng, Users.FirstName as owner_first_name, Users.LastName as owner_last_name, "
-                +"Vehicles.model, Vehicles.mode, Users.email as owneremail, Vehicles.img as carimage, Users.id as ownerid,  Vehicles.manufacturer "
+                +"Vehicles.model, Vehicles.mode, Users.email as owneremail, Users.profile_image as ownerimg, Vehicles.img as carimage, Users.id as ownerid,  Vehicles.manufacturer "
                 +"FROM Devices "
                 +"INNER JOIN Vehicles ON Vehicles.device_id = Devices.id "
                 +"INNER JOIN Users ON Users.id = Vehicles.owner_id AND Vehicles.id = @vehicle_id";

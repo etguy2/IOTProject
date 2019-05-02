@@ -36,6 +36,7 @@ public class car_full : car_partial {
         this.user = new user(); 
         this.user.id = (int)reader["ownerid"];
         this.user.email = utilitles.safeCast(reader, "owneremail");
+        this.user.img = utilitles.safeCast(reader, "ownerimg");
         this.user.first_name = utilitles.safeCast(reader, "owner_first_name");
         this.user.last_name = utilitles.safeCast(reader, "owner_last_name");
     }
