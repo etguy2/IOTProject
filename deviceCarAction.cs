@@ -29,15 +29,14 @@ namespace carSharing.deviceCarAction
 
             // Defines tiem time treshold for the permit
             DateTime checkin_expiration_treshold = DateTime.Now;
-            checkin_expiration_treshold.AddHours(-3); // Subs 3 hours because Azure are stupid.
-            checkin_expiration_treshold.AddMinutes(-1*checkin_validity_time);
+            checkin_expiration_treshold = checkin_expiration_treshold.AddMinutes(-1*checkin_validity_time);
 
             bool status = false;
 
             // Look for the right checkin in the DB
             string checkin_query =  "SELECT COUNT(*) FROM Permits "
                                     + "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id "
-                                    + "INNER JOIN Devices ON Vehicles.device_id = Devices.id AND Devices.MACID = @macid"
+                                    + "INNER JOIN Devices ON Vehicles.device_id = Devices.id AND Devices.MACID = @macid "
                                     + "AND Permits.checkin >= Convert(datetime, @checkin_expiration_treshold )";
 
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
@@ -62,5 +61,6 @@ namespace carSharing.deviceCarAction
             return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
         }
         private static string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
+        private static int _checkin_validity_time = Convert.ToInt32(System.Environment.GetEnvironmentVariable("checkin_expiration"));
     }
 }
