@@ -22,7 +22,7 @@ namespace carSharing.deviceCarAction
                 .Value;
 
             response response;
-            bool status = verifyCheckin(macid);
+            bool status = verifyCheckin(formatMACID(macid));
 
             if (status)
                 response = new response(1, "Approved");
@@ -32,6 +32,9 @@ namespace carSharing.deviceCarAction
             return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
         }
 
+        private static string formatMACID(string macid) {
+            return macid.Replace('_', ':');
+        }
         private static string notifyOwner(string macid) {
             string get_user_query = "SELECT Vehicles.owner_id, Users.FirstName, Users.LastName FROM Vehicles "
                                     + "CROSS JOIN Permits "
