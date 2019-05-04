@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
+using System.Data.SqlClient;
 
 namespace carSharing.deviceCarAction
 {
@@ -28,17 +29,35 @@ namespace carSharing.deviceCarAction
             checkin_expiration_treshold.AddHours(-3); // Subs 3 hours because Azure are stupid.
             checkin_expiration_treshold.AddMinutes(-1*checkin_validity_time);
 
+            bool status = false;
+
             // Look for the right checkin in the DB
             string checkin_query =  "SELECT COUNT(*) FROM Permits "
                                     + "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id "
                                     + "INNER JOIN Devices ON Vehicles.device_id = Devices.id AND Devices.MACID = @macid"
                                     + "AND Permits.checkin >= Convert(datetime, @checkin_expiration_treshold )";
 
+            using (SqlConnection conn = new SqlConnection(_conn_str)) {
+                conn.Open();
+                SqlCommand command = new SqlCommand(checkin_query, conn);
+                command.Parameters.AddWithValue("@macid", macid);
+                int rows = (int) command.ExecuteScalar();
+                if (rows >= 1) 
+                    status = true;
+                
+                conn.Close();
+            }
 
+            if (status) {
+                response = new response(1, "Approved");
 
+            } else {
+                response = new response(-2, "No permit " + permit_expiration_treshold.ToString());
+            }
 
 
             return req.CreateResponse(HttpStatusCode.OK, "Hello ");
         }
+        private static string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
     }
 }

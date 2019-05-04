@@ -18,7 +18,7 @@ namespace carSharing.userCarAction
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
             // Const Vars
-            const int permit_validity_time = 100; // No. of minutes until permit expiration time.
+            const int permit_validity_time = -100; // No. of minutes until permit expiration time.
 
             // parse query parameter
             string action = req.GetQueryNameValuePairs()
@@ -48,7 +48,7 @@ namespace carSharing.userCarAction
             // Defines tiem time treshold for the permit
             DateTime permit_expiration_treshold = DateTime.Now;
             permit_expiration_treshold.AddHours(-3); // Subs 3 hours because Azure are stupid.
-            permit_expiration_treshold.AddMinutes(-1*permit_validity_time);
+            permit_expiration_treshold.AddMinutes(permit_validity_time);
 
             // Look for the right Permit in the DB
             string permit_query =  "SELECT COUNT(*) FROM Permits "
