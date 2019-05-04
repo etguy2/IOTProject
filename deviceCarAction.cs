@@ -26,6 +26,7 @@ namespace carSharing.deviceCarAction
                 .Value;
 
             response response;
+            string notify_res = "";
 
             // Defines tiem time treshold for the permit
             DateTime checkin_expiration_treshold = DateTime.Now;
@@ -47,7 +48,7 @@ namespace carSharing.deviceCarAction
                 int rows = (int) command.ExecuteScalar();
                 if (rows >= 1) {
                     status = true;
-                    string notify_res = notifyOwner(macid);
+                    notify_res = notifyOwner(macid);
                 }
                 
                 conn.Close();
