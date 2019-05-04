@@ -19,6 +19,12 @@ namespace carSharing.deviceCarAction
                 .FirstOrDefault(q => string.Compare(q.Key, "macid", true) == 0)
                 .Value;
 
+            // Look for the right checkin in the DB
+            string checkin_query =  "SELECT COUNT(*) FROM Permits "
+                                    + "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id "
+                                    + "INNER JOIN Devices ON Vehicles.device_id = Devices.id AND Devices.MACID = @macid";
+
+            
 
             return req.CreateResponse(HttpStatusCode.OK, "Hello ");
         }
