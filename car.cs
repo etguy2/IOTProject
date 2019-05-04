@@ -27,12 +27,14 @@ public class car_partial {
 }
 public class car_full : car_partial {
     public string img;
+    public string MACID;
 
     public user user;
 
     public car_full() {}
     public car_full(SqlDataReader reader) : base(reader) {
         this.img = utilitles.safeCast(reader, "carimage");
+        this.MACID = (string)reader["MACID"];
         this.user = new user(); 
         this.user.id = (int)reader["ownerid"];
         this.user.email = utilitles.safeCast(reader, "owneremail");

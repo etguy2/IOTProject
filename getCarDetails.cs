@@ -20,7 +20,7 @@ namespace CarSharing.getCarDetails
                 .FirstOrDefault(q => string.Compare(q.Key, "vehicle_id", true) == 0)
                 .Value;
 
-            string get_car_query =  "SELECT Vehicles.id as id, Devices.lat, Vehicles.prod_year as year, Devices.lng, Users.FirstName as owner_first_name, Users.LastName as owner_last_name, "
+            string get_car_query =  "SELECT Vehicles.id as id, Devices.lat, Vehicles.prod_year as year, Devices.lng, Devices.MACID, Users.FirstName as owner_first_name, Users.LastName as owner_last_name, "
                 +"Vehicles.model, Vehicles.mode, Users.email as owneremail, Users.profile_image as ownerimg, Vehicles.img as carimage, Users.id as ownerid,  Vehicles.manufacturer "
                 +"FROM Devices "
                 +"INNER JOIN Vehicles ON Vehicles.device_id = Devices.id "
