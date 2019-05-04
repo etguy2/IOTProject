@@ -22,12 +22,11 @@ namespace carSharing.deviceCarAction
                 .Value;
 
             response response;
-            bool status = verifyCheckin( formatMACID( macid ) );
 
-            if (status)
-                response = new response(1, "Approved");
-            else 
-                response = new response(-1, "No permit");
+            // Makes sure the user has matched all the restrictions to unlock the car.
+            bool status = verifyCheckin( formatMACID( macid ) );
+            
+            response = (status) ? new response(1, "Approved") : new response(-1, "No permit");
 
             return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
         }
@@ -58,7 +57,6 @@ namespace carSharing.deviceCarAction
                 return "";
             }
         }
-
         private static bool verifyCheckin(string macid) {
             bool status = false;
             // Defines tiem time treshold for the permit
