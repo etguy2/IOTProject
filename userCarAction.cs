@@ -18,7 +18,7 @@ namespace carSharing.userCarAction
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
             // Const Vars
-            const int permit_validity_time = 100; // No. of minutes until permit expiration time.
+            const int permit_validity_time = 1000; // No. of minutes until permit expiration time.
 
             // parse query parameter
             string action = req.GetQueryNameValuePairs()
