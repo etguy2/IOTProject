@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Data.SqlClient;
+using CarSharing.Cryptography;
 
 public static class utilitles {
     private static Random random = new Random();
@@ -45,5 +46,25 @@ public static class utilitles {
             g.DrawImage(bmp, new Rectangle(-r, -r, 2*r, 2*r), new Rectangle(x-y, y-r, 2*r, 2*r), GraphicsUnit.Pixel);
         }
         return tmp;
+    }
+
+    public static bool validateUser(int user_id, string login_hash) {
+        string validate_query = "SELECT password_enc, enc_string FROM Users WHERE id = @user_id";
+        string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
+        bool status = false;
+        using (SqlConnection conn = new SqlConnection(_conn_str)) {
+            conn.Open();
+            SqlCommand command = new SqlCommand(validate_query, conn);
+            command.Parameters.AddWithValue("@user_id", user_id);
+            using (SqlDataReader reader = command.ExecuteReader()) {               
+                if (reader.Read()) {
+                    string stored_login_hash = SHA.GenerateSHA256String((string)reader["password_enc"]+(string)reader["enc_string"]).ToLower();
+                    if (stored_login_hash == login_hash)
+                        status = true;
+                }
+            }
+            conn.Close();
+        }
+        return status;
     }
 }
