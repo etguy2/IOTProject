@@ -31,6 +31,8 @@ namespace carSharing.userCarAction
                 .Value;
 
             response response;
+
+            // Verify user
             if (!utilitles.validateUser(System.Convert.ToInt32(user_id), login_hash)) {
                 response = new response(-1, "Invalid user Credentials");
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
@@ -39,9 +41,10 @@ namespace carSharing.userCarAction
             bool status = false;
             string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
 
-            string permit_query =  "SELECT COUNT(*) FROM Permits"
-                                    + "INNER JOIN Users ON Users.id = Permits.user_id AND Permits.user_id = @user_id"
-                                    + "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id AND Permits.vehicle_id = @vehicle_id";
+            // Look for the right Permit in the DB
+            string permit_query =  "SELECT COUNT(*) FROM Permits "
+                                    + "INNER JOIN Users ON Users.id = Permits.user_id AND Permits.user_id = @user_id "
+                                    + "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id AND Permits.vehicle_id = @vehicle_id ";
 
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
@@ -49,7 +52,7 @@ namespace carSharing.userCarAction
                 command.Parameters.AddWithValue("@user_id", user_id);
                 command.Parameters.AddWithValue("@vehicle_id", vehicle_id);
                 int rows = (int) command.ExecuteScalar();
-                if (rows >= 1)
+                if (rows >= 1) 
                     status = true;
                 
                 conn.Close();
