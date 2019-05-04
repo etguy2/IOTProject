@@ -48,13 +48,13 @@ namespace carSharing.userCarAction
             // Defines tiem time treshold for the permit
             DateTime permit_expiration_treshold = DateTime.Now;
             permit_expiration_treshold.AddHours(-3); // Subs 3 hours because Azure are stupid.
-            permit_expiration_treshold.AddMinutes(permit_validity_time);
+            permit_expiration_treshold.AddMinutes(-1*permit_validity_time);
 
             // Look for the right Permit in the DB
             string permit_query =  "SELECT COUNT(*) FROM Permits "
                                     + "INNER JOIN Users ON Users.id = Permits.user_id AND Permits.user_id = @user_id "
                                     + "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id AND Permits.vehicle_id = @vehicle_id "
-                                    + "AND Permits.time <= Convert(datetime, @permit_expiration_treshold )";
+                                    + "AND Permits.time >= Convert(datetime, @permit_expiration_treshold )";
 
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
