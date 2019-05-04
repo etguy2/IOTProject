@@ -22,7 +22,7 @@ namespace carSharing.deviceCarAction
                 .Value;
 
             response response;
-            bool status = verifyCheckin( formatMACID(macid) );
+            bool status = verifyCheckin( formatMACID( macid ) );
 
             if (status)
                 response = new response(1, "Approved");
@@ -32,6 +32,7 @@ namespace carSharing.deviceCarAction
             return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
         }
 
+        // Reversing the URL format of the MACID
         private static string formatMACID(string macid) {
             return macid.Replace('_', ':');
         }
@@ -44,7 +45,7 @@ namespace carSharing.deviceCarAction
              using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 SqlCommand command = new SqlCommand(get_user_query, conn);
-                command.Parameters.AddWithValue("@macid", Convert.ToInt32(macid));
+                command.Parameters.AddWithValue("@macid", macid);
                 using (SqlDataReader reader = command.ExecuteReader()) {               
                     if (reader.Read()) {
                         string name = (string)reader["FirstName"] + " " + (string)reader["LastName"];
