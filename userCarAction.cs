@@ -43,7 +43,7 @@ namespace carSharing.userCarAction
             }
 
             bool status = false;
-            string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
+
 
             // Defines tiem time treshold for the permit
             DateTime permit_expiration_treshold = DateTime.Now;
@@ -68,13 +68,27 @@ namespace carSharing.userCarAction
                 
                 conn.Close();
             }
-            if (!status) {
-                response = new response(-2, "No permit");
-            } else {
+            if (status) {
                 response = new response(1, "Approved");
+                update_checkin();
+
+            } else {
+                response = new response(-2, "No permit");
             }
             return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
         }
+        private static void update_checkin() {
+            DateTime checkin = DateTime.Now;
+            string update_checkin = "UPDATE Permits SET checkin = @checkin";
+            using (SqlConnection conn = new SqlConnection(_conn_str)) {
+                conn.Open();
+                SqlCommand command = new SqlCommand(update_checkin, conn);
+                command.Parameters.AddWithValue("@checkin", checkin);
+                command.ExecuteNonQuery();
+                conn.Close();
+            }
+        }
+        private static string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
 
     }
 }
