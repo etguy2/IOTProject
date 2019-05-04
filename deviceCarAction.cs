@@ -16,51 +16,18 @@ namespace carSharing.deviceCarAction
         [FunctionName("deviceCarAction")]
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
-            
-            // Const Vars
-            const int checkin_validity_time = 10; // No. of minutes until permit expiration time.
-
             // parse query parameter
             string macid = req.GetQueryNameValuePairs()
                 .FirstOrDefault(q => string.Compare(q.Key, "macid", true) == 0)
                 .Value;
 
             response response;
-            string notify_res = "";
+            bool status = verifyCheckin(macid);
 
-            // Defines tiem time treshold for the permit
-            DateTime checkin_expiration_treshold = DateTime.Now;
-            checkin_expiration_treshold = checkin_expiration_treshold.AddMinutes(-1*checkin_validity_time);
-
-            bool status = false;
-
-            // Look for the right checkin in the DB
-            string checkin_query =  "SELECT COUNT(*) FROM Permits "
-                                    + "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id "
-                                    + "INNER JOIN Devices ON Vehicles.device_id = Devices.id AND Devices.MACID = @macid "
-                                    + "AND Permits.checkin >= Convert(datetime, @checkin_expiration_treshold )";
-
-            using (SqlConnection conn = new SqlConnection(_conn_str)) {
-                conn.Open();
-                SqlCommand command = new SqlCommand(checkin_query, conn);
-                command.Parameters.AddWithValue("@macid", Convert.ToInt32(macid));
-                command.Parameters.AddWithValue("@checkin_expiration_treshold", checkin_expiration_treshold);
-                int rows = (int) command.ExecuteScalar();
-                if (rows >= 1) {
-                    status = true;
-                    notify_res = notifyOwner(macid);
-                }
-                
-                conn.Close();
-            }
-
-            if (status) {
-                response = new response(1, "Approved " + notify_res);
-
-            } else {
+            if (status)
+                response = new response(1, "Approved");
+            else 
                 response = new response(-1, "No permit");
-            }
-
 
             return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
         }
@@ -86,6 +53,33 @@ namespace carSharing.deviceCarAction
                 conn.Close();
                 return "";
             }
+        }
+
+        private static bool verifyCheckin(string macid) {
+            bool status = false;
+            // Defines tiem time treshold for the permit
+            DateTime checkin_expiration_treshold = DateTime.Now;
+            checkin_expiration_treshold = checkin_expiration_treshold.AddMinutes(-1*_checkin_validity_time);
+            // Look for the right checkin in the DB
+            string checkin_query =  "SELECT COUNT(*) FROM Permits "
+                                    + "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id "
+                                    + "INNER JOIN Devices ON Vehicles.device_id = Devices.id AND Devices.MACID = @macid "
+                                    + "AND Permits.checkin >= Convert(datetime, @checkin_expiration_treshold )";
+
+            using (SqlConnection conn = new SqlConnection(_conn_str)) {
+                conn.Open();
+                SqlCommand command = new SqlCommand(checkin_query, conn);
+                command.Parameters.AddWithValue("@macid", Convert.ToInt32(macid));
+                command.Parameters.AddWithValue("@checkin_expiration_treshold", checkin_expiration_treshold);
+                int rows = (int) command.ExecuteScalar();
+                if (rows >= 1) {
+                    status = true;
+                    notifyOwner(macid);
+                }
+                
+                conn.Close();
+            }
+            return status;
         }
         private static string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
         private static int _checkin_validity_time = Convert.ToInt32(System.Environment.GetEnvironmentVariable("checkin_expiration"));
