@@ -22,7 +22,7 @@ namespace carSharing.deviceCarAction
                 .Value;
 
             response response;
-            bool status = verifyCheckin(formatMACID(macid));
+            bool status = verifyCheckin(macid);
 
             if (status)
                 response = new response(1, "Approved");
