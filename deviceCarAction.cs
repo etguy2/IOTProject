@@ -42,7 +42,7 @@ namespace carSharing.deviceCarAction
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 SqlCommand command = new SqlCommand(checkin_query, conn);
-                command.Parameters.AddWithValue("@macid", macid);
+                command.Parameters.AddWithValue("@macid", Convert.ToInt32(macid));
                 int rows = (int) command.ExecuteScalar();
                 if (rows >= 1) 
                     status = true;
