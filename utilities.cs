@@ -74,20 +74,21 @@ public static class utilitles {
         }
         return status;
     }
-        public static void notifyUserById(string title, string body, int user_id) {
+        public static string notifyUserById(string title, string body, int user_id) {
             string validate_query = "SELECT notification_token FROM Users WHERE id = @user_id";
             string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
-            conn.Open();
-            SqlCommand command = new SqlCommand(validate_query, conn);
-            command.Parameters.AddWithValue("@user_id", user_id);
-            using (SqlDataReader reader = command.ExecuteReader()) {               
-                if (reader.Read()) {
-                    sendPush(title, body, (string)reader["notification_token"]);
+                conn.Open();
+                SqlCommand command = new SqlCommand(validate_query, conn);
+                command.Parameters.AddWithValue("@user_id", user_id);
+                using (SqlDataReader reader = command.ExecuteReader()) {               
+                    if (reader.Read()) {
+                        return sendPush(title, body, (string)reader["notification_token"]);
+                    }
                 }
+                conn.Close();
             }
-            conn.Close();
-        }
+            return "";
         }
         private static string sendPush(string title, string body, string target)
         {

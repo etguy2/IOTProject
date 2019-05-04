@@ -45,14 +45,16 @@ namespace carSharing.deviceCarAction
                 command.Parameters.AddWithValue("@macid", Convert.ToInt32(macid));
                 command.Parameters.AddWithValue("@checkin_expiration_treshold", checkin_expiration_treshold);
                 int rows = (int) command.ExecuteScalar();
-                if (rows >= 1) 
+                if (rows >= 1) {
                     status = true;
+                    string notify_res = notifyOwner(macid);
+                }
                 
                 conn.Close();
             }
 
             if (status) {
-                response = new response(1, "Approved");
+                response = new response(1, "Approved " + notify_res);
 
             } else {
                 response = new response(-1, "No permit");
@@ -62,7 +64,7 @@ namespace carSharing.deviceCarAction
             return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
         }
 
-        private static void notifyOwner(string macid) {
+        private static string notifyOwner(string macid) {
             string get_user_query = "SELECT Vehicles.owner_id, Users.FirstName, Users.LastName FROM Vehicles "
                                     + "CROSS JOIN Permits "
                                     + "INNER JOIN Devices ON Devices.MACID = @macid AND Vehicles.device_id = Devices.id"
@@ -75,12 +77,13 @@ namespace carSharing.deviceCarAction
                 using (SqlDataReader reader = command.ExecuteReader()) {               
                     if (reader.Read()) {
                         string name = (string)reader["FirstName"] + " " + (string)reader["LastName"];
-                        utilitles.notifyUserById("Car Unlocked", name + " Has just unlocked your car", (int)reader["owner_id"]);
+                        return utilitles.notifyUserById("Car Unlocked", name + " Has just unlocked your car", (int)reader["owner_id"]);
                     }
                 }
                
                 
                 conn.Close();
+                return "";
             }
         }
         private static string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
