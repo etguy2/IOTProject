@@ -46,7 +46,7 @@ namespace carSharing.userCarAction
             // Defines tiem time treshold for the permit
             DateTime permit_expiration_treshold = DateTime.Now;
             permit_expiration_treshold.AddHours(-3); // Subs 3 hours because Azure are stupid.
-            permit_expiration_treshold.AddMinutes(-100);
+            permit_expiration_treshold.AddMinutes(-59);
 
             // Look for the right Permit in the DB
             string permit_query =  "SELECT COUNT(*) FROM Permits "
