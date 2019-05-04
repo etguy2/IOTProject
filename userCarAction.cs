@@ -61,7 +61,7 @@ namespace carSharing.userCarAction
                 SqlCommand command = new SqlCommand(permit_query, conn);
                 command.Parameters.AddWithValue("@user_id", user_id);
                 command.Parameters.AddWithValue("@vehicle_id", vehicle_id);
-                command.Parameters.AddWithValue("@permit_expiration_treshold", permit_expiration_treshold.ToString("yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss"));
+                command.Parameters.AddWithValue("@permit_expiration_treshold", permit_expiration_treshold);
                 int rows = (int) command.ExecuteScalar();
                 if (rows >= 1) 
                     status = true;
