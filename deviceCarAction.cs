@@ -22,7 +22,7 @@ namespace carSharing.deviceCarAction
                 .Value;
 
             response response;
-            bool status = verifyCheckin(macid);
+            bool status = verifyCheckin( formatMACID(macid) );
 
             if (status)
                 response = new response(1, "Approved");
@@ -72,7 +72,7 @@ namespace carSharing.deviceCarAction
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 SqlCommand command = new SqlCommand(checkin_query, conn);
-                command.Parameters.AddWithValue("@macid", Convert.ToInt32(macid));
+                command.Parameters.AddWithValue("@macid", macid);
                 command.Parameters.AddWithValue("@checkin_expiration_treshold", checkin_expiration_treshold);
                 int rows = (int) command.ExecuteScalar();
                 if (rows >= 1) {
