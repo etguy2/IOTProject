@@ -43,6 +43,7 @@ namespace carSharing.deviceCarAction
                 conn.Open();
                 SqlCommand command = new SqlCommand(checkin_query, conn);
                 command.Parameters.AddWithValue("@macid", Convert.ToInt32(macid));
+                command.Parameters.AddWithValue("@checkin_expiration_treshold", checkin_expiration_treshold);
                 int rows = (int) command.ExecuteScalar();
                 if (rows >= 1) 
                     status = true;
