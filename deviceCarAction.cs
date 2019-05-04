@@ -61,6 +61,28 @@ namespace carSharing.deviceCarAction
 
             return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
         }
+
+        private static void notifyOwner(string macid) {
+            string get_user_query = "SELECT Vehicles.owner_id, Users.FirstName, Users.LastName FROM Vehicles "
+                                    + "CROSS JOIN Permits "
+                                    + "INNER JOIN Devices ON Devices.MACID = '1' AND Vehicles.device_id = Devices.id"
+                                    + "INNER JOIN Users ON Users.id = Permits.user_id";
+
+             using (SqlConnection conn = new SqlConnection(_conn_str)) {
+                conn.Open();
+                SqlCommand command = new SqlCommand(get_user_query, conn);
+                command.Parameters.AddWithValue("@macid", Convert.ToInt32(macid));
+                using (SqlDataReader reader = command.ExecuteReader()) {               
+                    if (reader.Read()) {
+                        string name = (string)reader["FirstName"] + " " + (string)reader["LastName"];
+                        utilitles.notifyUserById("Car Unlocked", name + " Has just unlocked your car", (int)reader["owner_id"]);
+                    }
+                }
+               
+                
+                conn.Close();
+            }
+        }
         private static string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
         private static int _checkin_validity_time = Convert.ToInt32(System.Environment.GetEnvironmentVariable("checkin_expiration"));
     }
