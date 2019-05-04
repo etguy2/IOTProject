@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
+using System.Net.Http.Formatting;
 using System.Data.SqlClient;
 
 namespace carSharing.deviceCarAction
@@ -23,6 +24,8 @@ namespace carSharing.deviceCarAction
             string macid = req.GetQueryNameValuePairs()
                 .FirstOrDefault(q => string.Compare(q.Key, "macid", true) == 0)
                 .Value;
+
+            response response;
 
             // Defines tiem time treshold for the permit
             DateTime checkin_expiration_treshold = DateTime.Now;
@@ -52,11 +55,11 @@ namespace carSharing.deviceCarAction
                 response = new response(1, "Approved");
 
             } else {
-                response = new response(-2, "No permit " + permit_expiration_treshold.ToString());
+                response = new response(-1, "No permit");
             }
 
 
-            return req.CreateResponse(HttpStatusCode.OK, "Hello ");
+            return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
         }
         private static string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
     }
