@@ -54,7 +54,7 @@ namespace carSharing.userCarAction
             string permit_query =  "SELECT COUNT(*) FROM Permits "
                                     + "INNER JOIN Users ON Users.id = Permits.user_id AND Permits.user_id = @user_id "
                                     + "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id AND Permits.vehicle_id = @vehicle_id "
-                                    + "AND Permits.time <= Convert(datetime, @permit_expiration_treshold'2019-05-4 08:53:53.840' )";
+                                    + "AND Permits.time <= Convert(datetime, @permit_expiration_treshold )";
 
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
