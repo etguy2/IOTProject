@@ -21,14 +21,14 @@ namespace carSharing.deviceCarAction
                 .FirstOrDefault(q => string.Compare(q.Key, "macid", true) == 0)
                 .Value;
 
-            response response;
+            int response;
 
             // Makes sure the user has matched all the restrictions to unlock the car.
             bool status = verifyCheckin( formatMACID( macid ) );
-            
-            response = (status) ? new response(1, "Approved") : new response(-1, "No permit");
 
-            return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
+            response = (status) ? 1 : 0;
+
+            return req.CreateResponse(HttpStatusCode.OK, status.ToString(), "text/plain");
         }
 
         // Reversing the URL format of the MACID
@@ -37,7 +37,7 @@ namespace carSharing.deviceCarAction
         }
         private static string notifyOwner(string macid) {
             string get_user_query = "SELECT Vehicles.owner_id, Users.FirstName, Users.LastName FROM Vehicles "
-                                    + "CROSS JOIN Permits "
+                                    + "INNER JOIN Permits ON Permits.status = 'APPROVED'"
                                     + "INNER JOIN Devices ON Devices.MACID = @macid AND Vehicles.device_id = Devices.id "
                                     + "INNER JOIN Users ON Users.id = Permits.user_id";
 

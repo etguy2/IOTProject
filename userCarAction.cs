@@ -36,7 +36,7 @@ namespace carSharing.userCarAction
             response response;
 
             // Verify user
-            if (!utilitles.validateUser(System.Convert.ToInt32(user_id), login_hash)) {
+            if ( !utilitles.validateUser( System.Convert.ToInt32( user_id ) , login_hash ) ) {
                 response = new response(-1, "Invalid user Credentials");
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
             }
@@ -46,17 +46,17 @@ namespace carSharing.userCarAction
 
             // Defines tiem time treshold for the permit
             DateTime permit_expiration_treshold = DateTime.Now;
-            permit_expiration_treshold = permit_expiration_treshold.AddMinutes(-1*_permit_validity_time);
+            permit_expiration_treshold = permit_expiration_treshold.AddMinutes( -1 * _permit_validity_time);
 
             // Look for the right Permit in the DB
             string permit_query =  "SELECT COUNT(*) FROM Permits "
-                                    + "INNER JOIN Users ON Users.id = Permits.user_id AND Permits.user_id = @user_id "
+                                    + "INNER JOIN Users ON Users.id = Permits.user_id AND Permits.user_id = @user_id AND Permits.status = 'APPROVED'"
                                     + "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id AND Permits.vehicle_id = @vehicle_id "
                                     + "AND Permits.time >= Convert(datetime, @permit_expiration_treshold )";
 
-            using (SqlConnection conn = new SqlConnection(_conn_str)) {
+            using ( SqlConnection conn = new SqlConnection( _conn_str ) ) {
                 conn.Open();
-                SqlCommand command = new SqlCommand(permit_query, conn);
+                SqlCommand command = new SqlCommand( permit_query, conn );
                 command.Parameters.AddWithValue("@user_id", user_id);
                 command.Parameters.AddWithValue("@vehicle_id", vehicle_id);
                 command.Parameters.AddWithValue("@permit_expiration_treshold", permit_expiration_treshold);
