@@ -17,9 +17,7 @@ namespace carSharing.deviceCarAction
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
             // parse query parameter
-            string macid = req.GetQueryNameValuePairs()
-                .FirstOrDefault(q => string.Compare(q.Key, "macid", true) == 0)
-                .Value;
+            string macid = utilitles.getURLVar(req, "macid");
 
             int response;
 
