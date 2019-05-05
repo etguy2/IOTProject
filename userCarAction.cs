@@ -50,7 +50,7 @@ namespace carSharing.userCarAction
 
             // Look for the right Permit in the DB
             string permit_query =  "SELECT COUNT(*) FROM Permits "
-                                    + "INNER JOIN Users ON Users.id = Permits.user_id AND Permits.user_id = @user_id AND Permits.status = 'APPROVED'"
+                                    + "INNER JOIN Users ON Users.id = Permits.user_id AND Permits.user_id = @user_id AND Permits.status = 'APPROVED' "
                                     + "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id AND Permits.vehicle_id = @vehicle_id "
                                     + "AND Permits.time >= Convert(datetime, @permit_expiration_treshold )";
 
