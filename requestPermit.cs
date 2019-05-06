@@ -37,15 +37,17 @@ namespace carSharing.requestPermit
                 utilitles.notifyUserById("Car Request", "Someone has requested your car no. " + vehicle_id, owner_id);
                 response = new response(1, "Permit request created");
                 sc = HttpStatusCode.OK;
-            } catch (System.Exception) {
-                //response = new response(ex.status, ex.Message);
-                 return req.CreateResponse( HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
+                return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
+            } catch (CarSharingException ex) {
+                response = new response(ex.status, ex.Message);
+                throw ex;
+
             } finally {
-                 return req.CreateResponse( HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
+                 
             }
 
             // Send back the response for the app.
-            return req.CreateResponse(sc, response, JsonMediaTypeFormatter.DefaultMediaType);   
+            return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
         
         }
         public static void createPermit(string user_id, string vehicle_id) {
