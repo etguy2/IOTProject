@@ -71,7 +71,7 @@ namespace carSharing.userCarAction
                 update_checkin();
 
             } else {
-                response = new response(-2, "No permit " + permit_expiration_treshold.ToString() +  "-----" + _permit_validity_time);
+                response = new response(-2, "No permit");
             }
             return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
         }
