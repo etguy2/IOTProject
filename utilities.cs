@@ -138,21 +138,21 @@ public static class utilitles {
                     .Value;
         }
 
-        public static int getOwnerByVehicle(string  vehicle_id) {
-            using (SqlConnection conn = new SqlConnection(_conn_str)) {
-                conn.Open();
-                string get_user_query = "SELECT owner_id FROM Vehicles WHERE id = @vehicle_id";
-                SqlCommand command = new SqlCommand(get_user_query, conn);
-                command.Parameters.AddWithValue("@user_id", get_user_query);
-                using (SqlDataReader reader = command.ExecuteReader()) {               
-                    if (reader.Read()) {
-                        conn.Close();
-                        return (int)reader["owner_id"];
-                    }
-                }
-                conn.Close();
-                return 0;
+        // public static int getOwnerByVehicle(string  vehicle_id) {
+        //     using (SqlConnection conn = new SqlConnection(_conn_str)) {
+        //         conn.Open();
+        //         string get_user_query = "SELECT owner_id FROM Vehicles WHERE id = @vehicle_id";
+        //         SqlCommand command = new SqlCommand(get_user_query, conn);
+        //         command.Parameters.AddWithValue("@user_id", get_user_query);
+        //         using (SqlDataReader reader = command.ExecuteReader()) {               
+        //             if (reader.Read()) {
+        //                 conn.Close();
+        //                 return (int)reader["owner_id"];
+        //             }
+        //         }
+        //         conn.Close();
+        //         return 0;
                 
-            }
-        }
+        //     }
+        // }
 }
