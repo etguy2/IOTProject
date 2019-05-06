@@ -48,7 +48,7 @@ namespace carSharing.requestPermit
             } catch (CarSharingException ex) {
                 dbConnect db = new dbConnect();
                 db.insert_log("catched ");
-                response = new response(0, "Error CSE + " + ex.Message);
+                response = new response(0, "Error CSE + " + ex.status.ToString());
                 log.Info("catched " + ex.Message);
                 return req.CreateResponse(HttpStatusCode.InternalServerError, response, JsonMediaTypeFormatter.DefaultMediaType);
             }

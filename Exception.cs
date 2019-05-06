@@ -17,7 +17,7 @@ namespace CarSharing.Exceptions
         }
 
         public CarSharingException() { }
-        public CarSharingException(int status, string message) : base(message) { }
+        public CarSharingException(int status, string message) { this.status = status; }
         public CarSharingException(string message, Exception innerException) {}
         public CarSharingException(string message, string fileName) {}
         public CarSharingException(string message, string fileName, Exception innerException) {}
