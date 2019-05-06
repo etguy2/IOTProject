@@ -25,11 +25,11 @@ namespace carSharing.requestPermit
 
             // Validates user identity
             if ( !utilitles.validateUser( System.Convert.ToInt32( user_id ) , login_hash ) ) {
-                response = new response(-1, "Invalid user Credentials");
+                response = new response(-1, "Invalid user Credentials " + user_id + "-" + login_hash);
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
             }
             createPermit(user_id, vehicle_id);
-            
+
             response = new response(1, "Permit request created");
             return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
         }
