@@ -139,6 +139,7 @@ public static class utilitles {
         }
 
         public static int getOwnerByVehicle(string  vehicle_id) {
+            int owner_id = -1;
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 string get_user_query = "SELECT owner_id FROM Vehicles WHERE id = @vehicle_id";
@@ -146,12 +147,11 @@ public static class utilitles {
                 command.Parameters.AddWithValue("@vehicle_id", vehicle_id);
                 using (SqlDataReader reader = command.ExecuteReader()) {               
                     if (reader.Read()) {
-                        conn.Close();
-                        return (int)reader["owner_id"];
+                        owner_id = (int)reader["owner_id"];
                     }
                 }
                 conn.Close();
-                return 0;
+                return owner_id;
                 
             }
         }
