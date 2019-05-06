@@ -21,6 +21,7 @@ namespace carSharing.requestPermit
             HttpStatusCode sc = HttpStatusCode.BadRequest;
 
             try {
+                log.Info("try");
                 // parse query parameter.
                 string user_id = utilitles.getURLVar(req, "user_id");
                 string login_hash = utilitles.getURLVar(req, "login_hash");
@@ -39,12 +40,14 @@ namespace carSharing.requestPermit
                 sc = HttpStatusCode.OK;
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
             } catch (CarSharingException ex) {
+                log.Info("catched " + ex.Message);
                 //response = new response(ex.status, ex.Message);
                 goto MyLabel;
             } finally {
-                 
+                log.Info("finally");
             }
 
+            log.Info("after");
             // Send back the response for the app.
             MyLabel:
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
