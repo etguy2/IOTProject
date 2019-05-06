@@ -6,12 +6,19 @@ using System.Data.SqlClient;
 
 [Serializable()]
 
-class CarSharingException : System.Exception {
+class CarSharingException {
     public int status {
         get { return status; }
         protected set { status = value; }
     }
-    public CarSharingException(int status, string message) : base(message) { this.status = status; }
+    public string message {
+        get { return message; }
+        protected set { message = value; }
+    }
+    public CarSharingException(int status, string message) {
+        this.status = status;
+        this.message = message;
+    }
 }
 class InvalidInputException : CarSharingException {
 
