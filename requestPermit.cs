@@ -41,7 +41,7 @@ namespace carSharing.requestPermit
                 response = new response(1, "Permit request created");
                 sc = HttpStatusCode.OK;
                 log.Info("after");
-                 dbConnect db = new dbConnect();
+                 dbConnect db = new dbConnect(); 
                 db.insert_log("normal ");
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
 
