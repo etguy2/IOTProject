@@ -15,7 +15,7 @@ namespace carSharing.requestPermit
         private static string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
 
         [FunctionName("requestPermit")]
-        public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
+        public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
             response response = new response(0, "Error");
             HttpStatusCode sc = HttpStatusCode.OK;
