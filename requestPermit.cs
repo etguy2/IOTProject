@@ -18,43 +18,35 @@ namespace carSharing.requestPermit
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
             response response = new response(0, "Error");
-            HttpStatusCode sc = HttpStatusCode.BadRequest;
+            HttpStatusCode sc = HttpStatusCode.OK;
 
             try {
                 log.Info("try");
-                // // parse query parameter.
-                // string user_id = utilitles.getURLVar(req, "user_id");
-                // string login_hash = utilitles.getURLVar(req, "login_hash");
-                // string vehicle_id = utilitles.getURLVar(req, "vehicle_id");
+                // parse query parameter.
+                string user_id = utilitles.getURLVar(req, "user_id");
+                string login_hash = utilitles.getURLVar(req, "login_hash");
+                string vehicle_id = utilitles.getURLVar(req, "vehicle_id");
 
-                // // Validates user identity.
-                // utilitles.validateUser( System.Convert.ToInt32( user_id ) , login_hash );
+                // Validates user identity.
+                utilitles.validateUser( System.Convert.ToInt32( user_id ) , login_hash );
 
-                // // creates the request.
-                // createPermit(user_id, vehicle_id);
+                // creates the request.
+                createPermit(user_id, vehicle_id);
 
-                // // Notify the owner of the car.
-                // int owner_id = utilitles.getOwnerByVehicle( vehicle_id );
-                // utilitles.notifyUserById("Car Request", "Someone has requested your car no. " + vehicle_id, owner_id);
-                // response = new response(1, "Permit request created");
-                // sc = HttpStatusCode.OK;
-                // return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
-                throw new InvalidInputException("user_id");
+                // Notify the owner of the car.
+                int owner_id = utilitles.getOwnerByVehicle( vehicle_id );
+                utilitles.notifyUserById("Car Request", "Someone has requested your car no. " + vehicle_id, owner_id);
+                response = new response(1, "Permit request created");
+                sc = HttpStatusCode.OK;
+                return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
+
             } catch (System.Exception ex) {
                 response = new response(0, "Error");
-                return req.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
                 log.Info("catched " + ex.Message);
-                //response = new response(ex.status, ex.Message);
-                goto MyLabel;
-            } finally {
-                log.Info("finally");
-                
+                return req.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
             log.Info("after");
-            // Send back the response for the app.
-            MyLabel:
-                 return req.CreateResponse(HttpStatusCode.InternalServerError, "finally");
         
         }
         public static void createPermit(string user_id, string vehicle_id) {
