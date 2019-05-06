@@ -20,7 +20,7 @@ namespace carSharing.requestPermit
             response response = new response(0, "Error");
             HttpStatusCode sc = HttpStatusCode.OK;
 
-            try {
+            // try {
                 log.Info("try");
                 // parse query parameter.
                 string user_id = utilitles.getURLVar(req, "user_id");
@@ -38,15 +38,16 @@ namespace carSharing.requestPermit
                 utilitles.notifyUserById("Car Request", "Someone has requested your car no. " + vehicle_id, owner_id);
                 response = new response(1, "Permit request created");
                 sc = HttpStatusCode.OK;
+                log.Info("after");
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
 
-            } catch (System.Exception ex) {
-                response = new response(0, "Error");
-                log.Info("catched " + ex.Message);
-                return req.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
-            }
+            // } catch (System.Exception ex) {
+            //     response = new response(0, "Error");
+            //     log.Info("catched " + ex.Message);
+            //     return req.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            // }
 
-            log.Info("after");
+            
         
         }
         public static void createPermit(string user_id, string vehicle_id) {
