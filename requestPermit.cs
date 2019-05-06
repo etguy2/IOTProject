@@ -42,6 +42,8 @@ namespace carSharing.requestPermit
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
 
             } catch (VehicleNotFound ex) {
+                dbConnect db = new dbConnect();
+                db.insert_log("catched " + ex.Message);
                 response = new response(0, "Error");
                 log.Info("catched " + ex.Message);
                 return req.CreateResponse(HttpStatusCode.InternalServerError, "error");
