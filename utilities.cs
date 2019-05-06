@@ -69,6 +69,8 @@ public static class utilitles {
                     string stored_login_hash = SHA.GenerateSHA256String((string)reader["password_enc"]+(string)reader["enc_string"]).ToLower();
                     if (stored_login_hash == login_hash)
                         status = true;
+                } else {
+                    throw new UserNotVerified(user_id.ToString());
                 }
             }
             conn.Close();
@@ -133,9 +135,12 @@ public static class utilitles {
         }
         private static readonly HttpClient client = new HttpClient();
         public static string getURLVar(HttpRequestMessage req, string name) {
-            return req.GetQueryNameValuePairs()
+            string res = req.GetQueryNameValuePairs()
                     .FirstOrDefault(q => string.Compare(q.Key, name, true) == 0)
                     .Value;
+            if (res == string.Empty)
+                throw new InvalidInputException(name);
+            return res;
         }
 
         public static int getOwnerByVehicle(string  vehicle_id) {
@@ -146,9 +151,10 @@ public static class utilitles {
                 SqlCommand command = new SqlCommand(get_user_query, conn);
                 command.Parameters.AddWithValue("@vehicle_id", vehicle_id);
                 using (SqlDataReader reader = command.ExecuteReader()) {               
-                    if (reader.Read()) {
+                    if (reader.Read()) 
                         owner_id = (int)reader["owner_id"];
-                    }
+                    else
+                        throw new VehicleNotFound(vehicle_id); 
                 }
                 conn.Close();
                 return owner_id;
