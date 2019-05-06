@@ -154,7 +154,7 @@ public static class utilitles {
                     if (reader.Read()) 
                         owner_id = (int)reader["owner_id"];
                     else
-                        throw new VehicleNotFound(vehicle_id); 
+                        throw new FileNotFoundException(); 
                 }
                 conn.Close();
                 return owner_id;
