@@ -49,7 +49,7 @@ namespace carSharing.requestPermit
                 db.insert_log("catched ");
                 response = new response(0, "Error + " + ex.Message);
                 log.Info("catched " + ex.Message);
-                return req.CreateResponse(HttpStatusCode.InternalServerError, "error");
+                return req.CreateResponse(HttpStatusCode.InternalServerError, response, JsonMediaTypeFormatter.DefaultMediaType);
             }
 
             
