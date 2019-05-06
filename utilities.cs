@@ -153,8 +153,8 @@ public static class utilitles {
                 using (SqlDataReader reader = command.ExecuteReader()) {               
                     if (reader.Read()) 
                         owner_id = (int)reader["owner_id"];
-                    else
-                        throw new VehicleNotFound(vehicle_id); 
+                    //else
+                       // throw new VehicleNotFound(vehicle_id); 
                 }
                 conn.Close();
                 return owner_id;
