@@ -39,6 +39,7 @@ namespace carSharing.requestPermit
                 sc = HttpStatusCode.OK;
             } catch (System.Exception ex) {
                 //response = new response(ex.status, ex.Message);
+                 return req.CreateResponse( HttpStatusCode.OK;, response, JsonMediaTypeFormatter.DefaultMediaType);   
             }
 
             // Send back the response for the app.
