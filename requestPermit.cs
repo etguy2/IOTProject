@@ -41,7 +41,7 @@ namespace carSharing.requestPermit
                 log.Info("after");
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
 
-            } catch (CarSharingException ex) {
+            } catch (VehicleNotFound ex) {
                 response = new response(0, "Error");
                 log.Info("catched " + ex.Message);
                 return req.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
