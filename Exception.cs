@@ -3,16 +3,32 @@ using System.Text;
 using System.Linq;
 using System.Net.Http.Formatting;
 using System.Data.SqlClient;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Security;
 
-[Serializable()]
+    [ComVisible(true)]
+    public class CarSharingException : System.IO.IOException
+    {
+        public CarSharingException() {}
+        public CarSharingException(string message) {}
+        public CarSharingException(string message, Exception innerException) {}
+        public CarSharingException(string message, string fileName) {}
+        public CarSharingException(string message, string fileName, Exception innerException) {}
+        protected CarSharingException(SerializationInfo info, StreamingContext context) {}
 
-class CarSharingException : System.Exception {
-    public int status {
-        get { return status; }
-        protected set { status = value; }
+        public override string Message { get; }
+        public string FileName { get; }
+        public string FusionLog { get; }
+
     }
-    public CarSharingException(int status, string message) : base(message) { this.status = status; }
-}
+// class CarSharingException : System.Exception {
+//     public int status {
+//         get { return status; }
+//         protected set { status = value; }
+//     }
+//     public CarSharingException(int status, string message) : base(message) { this.status = status; }
+// }
 class InvalidInputException : CarSharingException {
 
     public InvalidInputException() : base(-1, "invalid Input") {}
