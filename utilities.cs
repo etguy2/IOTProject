@@ -17,6 +17,7 @@ using CarSharing.Cryptography;
 
 public static class utilitles {
     private static Random random = new Random();
+    private static string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
     public static string RandomString(int length)
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -76,7 +77,7 @@ public static class utilitles {
     }
         public static string notifyUserById(string title, string body, int user_id) {
             string validate_query = "SELECT notification_token FROM Users WHERE id = @user_id";
-            string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
+            
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 SqlCommand command = new SqlCommand(validate_query, conn);
@@ -135,5 +136,23 @@ public static class utilitles {
             return req.GetQueryNameValuePairs()
                     .FirstOrDefault(q => string.Compare(q.Key, name, true) == 0)
                     .Value;
+        }
+
+        public static int getOwnerByVehicle(string  vehicle_id) {
+            using (SqlConnection conn = new SqlConnection(_conn_str)) {
+                conn.Open();
+                string get_user_query = "SELECT owner_id FROM Vehicles WHERE id = @vehicle_id";
+                SqlCommand command = new SqlCommand(get_user_query, conn);
+                command.Parameters.AddWithValue("@user_id", get_user_query);
+                using (SqlDataReader reader = command.ExecuteReader()) {               
+                    if (reader.Read()) {
+                        conn.Close();
+                        return (int)reader["owner_id"];
+                    }
+                }
+                conn.Close();
+                return 0;
+                
+            }
         }
 }

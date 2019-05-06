@@ -29,6 +29,8 @@ namespace carSharing.requestPermit
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
             }
             createPermit(user_id, vehicle_id);
+            int owner_id = utilitles.getOwnerByVehicle( vehicle_id );
+            utilitles.notifyUserById("Car Request", "Someone has requested your car no. " + vehicle_id, owner_id);
 
             response = new response(1, "Permit request created");
             return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
