@@ -17,21 +17,25 @@ namespace carSharing.requestPermit
         [FunctionName("requestPermit")]
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
-            // parse query parameter
+            // parse query parameter.
             string user_id = utilitles.getURLVar(req, "user_id");
             string login_hash = utilitles.getURLVar(req, "login_hash");
             string vehicle_id = utilitles.getURLVar(req, "vehicle_id");
             response response;
 
-            // Validates user identity
+            // Validates user identity.
             if ( !utilitles.validateUser( System.Convert.ToInt32( user_id ) , login_hash ) ) {
                 response = new response(-1, "Invalid user Credentials");
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
             }
+            // creates the request.
             createPermit(user_id, vehicle_id);
-            int owner_id = utilitles.getOwnerByVehicle( vehicle_id );
-            utilitles.notifyUserById("Car Request", "Someone has requested your car no. " + vehicle_id, owner_id);
 
+            // Notify the owner of the car.
+            // int owner_id = utilitles.getOwnerByVehicle( vehicle_id );
+            // utilitles.notifyUserById("Car Request", "Someone has requested your car no. " + vehicle_id, owner_id);
+
+            // Send back the response for the app.
             response = new response(1, "Permit request created");
             return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
         }
