@@ -6,7 +6,8 @@ using System.Data.SqlClient;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Security;
-
+namespace CarSharing.Exceptions
+{
     [ComVisible(true)]
     public class CarSharingException : System.IO.IOException
     {
@@ -27,25 +28,26 @@ using System.Security;
         public string FusionLog { get; }
 
     }
-class CarSharingException2 : System.Exception {
-    public int status {
-        get { return status; }
-        protected set { status = value; }
+    class CarSharingException2 : System.Exception {
+        public int status {
+            get { return status; }
+            protected set { status = value; }
+        }
+        public CarSharingException2(int status, string message) : base(message) { this.status = status; }
     }
-    public CarSharingException2(int status, string message) : base(message) { this.status = status; }
-}
-class InvalidInputException : CarSharingException {
+    class InvalidInputException : CarSharingException {
 
-    public InvalidInputException() : base(-1, "invalid Input") {}
-    public InvalidInputException(string message) : base(-1, "invalid Input, no '"+message+"'") {}
-}
+        public InvalidInputException() : base(-1, "invalid Input") {}
+        public InvalidInputException(string message) : base(-1, "invalid Input, no '"+message+"'") {}
+    }
 
-class UserNotVerified : CarSharingException2 {
-    public UserNotVerified() : base(-2, "User not verified") {}
-    public UserNotVerified(string message) : base(-2, "user no. '"+message+"' could not be verified") {}
-}
+    class UserNotVerified : CarSharingException2 {
+        public UserNotVerified() : base(-2, "User not verified") {}
+        public UserNotVerified(string message) : base(-2, "user no. '"+message+"' could not be verified") {}
+    }
 
-class VehicleNotFound : CarSharingException2 {
-    public VehicleNotFound() : base(-3, "Vehicle not found.") {}
-    public VehicleNotFound(string message) : base(-1, "Vehicle no. '"+message+"' not found in the DB.") {}
+    class VehicleNotFound : CarSharingException2 {
+        public VehicleNotFound() : base(-3, "Vehicle not found.") {}
+        public VehicleNotFound(string message) : base(-1, "Vehicle no. '"+message+"' not found in the DB.") {}
+    }
 }

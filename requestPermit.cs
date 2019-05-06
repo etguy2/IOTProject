@@ -8,6 +8,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using System.Net.Http.Formatting;
 using System.Data.SqlClient;
+using CarSharing.Exceptions;
 
 namespace carSharing.requestPermit
 {
@@ -47,7 +48,7 @@ namespace carSharing.requestPermit
             } catch (CarSharingException ex) {
                 dbConnect db = new dbConnect();
                 db.insert_log("catched ");
-                response = new response(0, "Error + " + ex.status);
+                response = new response(0, "Error CSE + ");
                 log.Info("catched " + ex.Message);
                 return req.CreateResponse(HttpStatusCode.InternalServerError, response, JsonMediaTypeFormatter.DefaultMediaType);
             }

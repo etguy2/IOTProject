@@ -14,6 +14,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using CarSharing.Cryptography;
+using CarSharing.Exceptions;
 
 public static class utilitles {
     private static Random random = new Random();
