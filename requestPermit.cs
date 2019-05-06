@@ -39,11 +39,13 @@ namespace carSharing.requestPermit
                 response = new response(1, "Permit request created");
                 sc = HttpStatusCode.OK;
                 log.Info("after");
+                 dbConnect db = new dbConnect();
+                db.insert_log("normal ");
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
 
             } catch (VehicleNotFound ex) {
                 dbConnect db = new dbConnect();
-                db.insert_log("catched " + ex.Message);
+                db.insert_log("catched ");
                 response = new response(0, "Error");
                 log.Info("catched " + ex.Message);
                 return req.CreateResponse(HttpStatusCode.InternalServerError, "error");
