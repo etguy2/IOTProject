@@ -143,7 +143,7 @@ public static class utilitles {
                 conn.Open();
                 string get_user_query = "SELECT owner_id FROM Vehicles WHERE id = @vehicle_id";
                 SqlCommand command = new SqlCommand(get_user_query, conn);
-                command.Parameters.AddWithValue("@user_id", get_user_query);
+                command.Parameters.AddWithValue("@vehicle_id", vehicle_id);
                 using (SqlDataReader reader = command.ExecuteReader()) {               
                     if (reader.Read()) {
                         conn.Close();
