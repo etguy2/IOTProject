@@ -42,7 +42,7 @@ namespace carSharing.requestPermit
                 throw new InvalidInputException("user_id");
             } catch (CarSharingException ex) {
                 response = new response(0, "Error");
-                return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);  
+                return req.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
                 log.Info("catched " + ex.Message);
                 //response = new response(ex.status, ex.Message);
                 goto MyLabel;
