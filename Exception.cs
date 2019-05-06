@@ -15,7 +15,7 @@ using System.Security;
             protected set { status = value; }
         }
 
-        public CarSharingException() {}
+        public CarSharingException() { }
         public CarSharingException(int status, string message) {}
         public CarSharingException(string message, Exception innerException) {}
         public CarSharingException(string message, string fileName) {}
