@@ -36,9 +36,9 @@ namespace carSharing.requestPermit
                 utilitles.notifyUserById("Car Request", "Someone has requested your car no. " + vehicle_id, owner_id);
                 response = new response(1, "Permit request created");
 
-            } catch (CarSharingException ex) {
+            } catch (VehicleNotFound ex) {
                 response = new response(ex.status, ex.Message);
-                return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
+                
             }
 
             // Send back the response for the app.
