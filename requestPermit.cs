@@ -15,7 +15,7 @@ namespace carSharing.requestPermit
         private static string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
 
         [FunctionName("requestPermit")]
-        public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
+        public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
             response response = new response(0, "Error");
             HttpStatusCode sc = HttpStatusCode.BadRequest;
@@ -40,7 +40,7 @@ namespace carSharing.requestPermit
                 // sc = HttpStatusCode.OK;
                 // return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
                 throw new InvalidInputException("user_id");
-            } catch (CarSharingException ex) {
+            } catch (System.Exception ex) {
                 response = new response(0, "Error");
                 return req.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
                 log.Info("catched " + ex.Message);
@@ -48,12 +48,13 @@ namespace carSharing.requestPermit
                 goto MyLabel;
             } finally {
                 log.Info("finally");
+                
             }
 
             log.Info("after");
             // Send back the response for the app.
             MyLabel:
-                return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
+                 return req.CreateResponse(HttpStatusCode.InternalServerError, "finally");
         
         }
         public static void createPermit(string user_id, string vehicle_id) {
