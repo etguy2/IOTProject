@@ -47,7 +47,7 @@ namespace carSharing.requestPermit
             } catch (System.Exception ex) {
                 dbConnect db = new dbConnect();
                 db.insert_log("catched ");
-                response = new response(0, "Error");
+                response = new response(0, "Error + " + ex.Message);
                 log.Info("catched " + ex.Message);
                 return req.CreateResponse(HttpStatusCode.InternalServerError, "error");
             }

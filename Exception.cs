@@ -10,8 +10,13 @@ using System.Security;
     [ComVisible(true)]
     public class CarSharingException : System.IO.IOException
     {
+        public int status {
+            get { return status; }
+            protected set { status = value; }
+        }
+
         public CarSharingException() {}
-        public CarSharingException(string message) {}
+        public CarSharingException(int status, string message) {}
         public CarSharingException(string message, Exception innerException) {}
         public CarSharingException(string message, string fileName) {}
         public CarSharingException(string message, string fileName, Exception innerException) {}
@@ -29,7 +34,7 @@ class CarSharingException2 : System.Exception {
     }
     public CarSharingException2(int status, string message) : base(message) { this.status = status; }
 }
-class InvalidInputException : CarSharingException2 {
+class InvalidInputException : CarSharingException {
 
     public InvalidInputException() : base(-1, "invalid Input") {}
     public InvalidInputException(string message) : base(-1, "invalid Input, no '"+message+"'") {}
