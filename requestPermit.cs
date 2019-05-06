@@ -18,6 +18,7 @@ namespace carSharing.requestPermit
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
             response response = new response(0, "Error");
+            HttpStatusCode sc = HttpStatusCode.BadRequest;
 
             try {
                 // parse query parameter.
@@ -35,14 +36,13 @@ namespace carSharing.requestPermit
                 int owner_id = utilitles.getOwnerByVehicle( vehicle_id );
                 utilitles.notifyUserById("Car Request", "Someone has requested your car no. " + vehicle_id, owner_id);
                 response = new response(1, "Permit request created");
-
+                sc = HttpStatusCode.OK;
             } catch (CarSharingException ex) {
                 response = new response(ex.status, ex.Message);
-                
             }
 
             // Send back the response for the app.
-            return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
+            return req.CreateResponse(sc, response, JsonMediaTypeFormatter.DefaultMediaType);   
         
         }
         public static void createPermit(string user_id, string vehicle_id) {
