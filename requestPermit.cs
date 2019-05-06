@@ -22,23 +22,24 @@ namespace carSharing.requestPermit
 
             try {
                 log.Info("try");
-                // parse query parameter.
-                string user_id = utilitles.getURLVar(req, "user_id");
-                string login_hash = utilitles.getURLVar(req, "login_hash");
-                string vehicle_id = utilitles.getURLVar(req, "vehicle_id");
+                // // parse query parameter.
+                // string user_id = utilitles.getURLVar(req, "user_id");
+                // string login_hash = utilitles.getURLVar(req, "login_hash");
+                // string vehicle_id = utilitles.getURLVar(req, "vehicle_id");
 
-                // Validates user identity.
-                utilitles.validateUser( System.Convert.ToInt32( user_id ) , login_hash );
+                // // Validates user identity.
+                // utilitles.validateUser( System.Convert.ToInt32( user_id ) , login_hash );
 
-                // creates the request.
-                createPermit(user_id, vehicle_id);
+                // // creates the request.
+                // createPermit(user_id, vehicle_id);
 
-                // Notify the owner of the car.
-                int owner_id = utilitles.getOwnerByVehicle( vehicle_id );
-                utilitles.notifyUserById("Car Request", "Someone has requested your car no. " + vehicle_id, owner_id);
-                response = new response(1, "Permit request created");
-                sc = HttpStatusCode.OK;
-                return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
+                // // Notify the owner of the car.
+                // int owner_id = utilitles.getOwnerByVehicle( vehicle_id );
+                // utilitles.notifyUserById("Car Request", "Someone has requested your car no. " + vehicle_id, owner_id);
+                // response = new response(1, "Permit request created");
+                // sc = HttpStatusCode.OK;
+                // return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
+                throw new InvalidInputException("user_id");
             } catch (CarSharingException ex) {
                 response = new response(0, "Error");
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);  
