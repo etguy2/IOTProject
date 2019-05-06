@@ -20,7 +20,7 @@ namespace carSharing.requestPermit
             response response = new response(0, "Error");
             HttpStatusCode sc = HttpStatusCode.OK;
 
-            // try {
+            try {
                 log.Info("try");
                 // parse query parameter.
                 string user_id = utilitles.getURLVar(req, "user_id");
@@ -41,11 +41,11 @@ namespace carSharing.requestPermit
                 log.Info("after");
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
 
-            // } catch (System.Exception ex) {
-            //     response = new response(0, "Error");
-            //     log.Info("catched " + ex.Message);
-            //     return req.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
-            // }
+            } catch (CarSharingException ex) {
+                response = new response(0, "Error");
+                log.Info("catched " + ex.Message);
+                return req.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
 
             
         
