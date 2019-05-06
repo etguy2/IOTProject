@@ -44,7 +44,7 @@ namespace carSharing.requestPermit
                 db.insert_log("normal ");
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
 
-            } catch (System.Exception ex) {
+            } catch (CarSharingException ex) {
                 dbConnect db = new dbConnect();
                 db.insert_log("catched ");
                 response = new response(0, "Error + " + ex.Message);
