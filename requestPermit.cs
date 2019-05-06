@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -43,7 +44,7 @@ namespace carSharing.requestPermit
                 db.insert_log("normal ");
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
 
-            } catch (FileNotFoundException ex) {
+            } catch (System.Exception ex) {
                 dbConnect db = new dbConnect();
                 db.insert_log("catched ");
                 response = new response(0, "Error");
