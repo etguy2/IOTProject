@@ -133,7 +133,7 @@ public static class utilitles {
         private static readonly HttpClient client = new HttpClient();
         public static string getURLVar(HttpRequestMessage req, string name) {
             return req.GetQueryNameValuePairs()
-                    .FirstOrDefault(q => string.Compare(q.Key, "macid", true) == 0)
+                    .FirstOrDefault(q => string.Compare(q.Key, name, true) == 0)
                     .Value;
         }
 }
