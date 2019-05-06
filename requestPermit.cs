@@ -17,7 +17,7 @@ namespace carSharing.requestPermit
         [FunctionName("requestPermit")]
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
-            response response;
+            response response = new response(0, "Error");
 
             try {
                 // parse query parameter.
@@ -39,7 +39,7 @@ namespace carSharing.requestPermit
             } catch (CarSharingException ex) {
                 response = new response(ex.status, ex.Message);
             }
-            
+
             // Send back the response for the app.
             return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
         
