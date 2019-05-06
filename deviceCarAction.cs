@@ -39,7 +39,7 @@ namespace carSharing.deviceCarAction
                                     + "INNER JOIN Devices ON Devices.MACID = @macid AND Vehicles.device_id = Devices.id "
                                     + "INNER JOIN Users ON Users.id = Permits.user_id";
 
-             using (SqlConnection conn = new SqlConnection(_conn_str)) {
+            using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 SqlCommand command = new SqlCommand(get_user_query, conn);
                 command.Parameters.AddWithValue("@macid", macid);
