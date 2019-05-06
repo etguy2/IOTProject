@@ -32,8 +32,8 @@ namespace carSharing.requestPermit
             createPermit(user_id, vehicle_id);
 
             // Notify the owner of the car.
-            // int owner_id = utilitles.getOwnerByVehicle( vehicle_id );
-            // utilitles.notifyUserById("Car Request", "Someone has requested your car no. " + vehicle_id, owner_id);
+            int owner_id = utilitles.getOwnerByVehicle( vehicle_id );
+            utilitles.notifyUserById("Car Request", "Someone has requested your car no. " + vehicle_id, owner_id);
 
             // Send back the response for the app.
             response = new response(1, "Permit request created");
