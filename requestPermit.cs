@@ -40,13 +40,14 @@ namespace carSharing.requestPermit
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
             } catch (CarSharingException ex) {
                 //response = new response(ex.status, ex.Message);
-
+                goto MyLabel;
             } finally {
                  
             }
 
             // Send back the response for the app.
-            return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
+            MyLabel:
+                return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
         
         }
         public static void createPermit(string user_id, string vehicle_id) {
