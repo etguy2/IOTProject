@@ -29,20 +29,13 @@ namespace CarSharing.Exceptions
         public string FusionLog { get; }
 
     }
-    class CarSharingException2 : System.Exception {
-        public int status {
-            get { return status; }
-            protected set { status = value; }
-        }
-        public CarSharingException2(int status, string message) : base(message) { this.status = status; }
-    }
     class InvalidInputException : CarSharingException {
 
         public InvalidInputException() : base(-1, "invalid Input") {}
         public InvalidInputException(string message) : base(-1, "invalid Input, no '"+message+"'") {}
     }
 
-    class UserNotVerified : CarSharingException2 {
+    class UserNotVerified : CarSharingException {
         public UserNotVerified() : base(-2, "User not verified") {}
         public UserNotVerified(string message) : base(-2, "user no. '"+message+"' could not be verified") {}
     }
