@@ -23,7 +23,6 @@ namespace carSharing.requestPermit
             HttpStatusCode sc = HttpStatusCode.OK;
 
             try {
-                log.Info("try");
                 // parse query parameter.
                 string user_id = utilitles.getURLVar(req, "user_id");
                 string login_hash = utilitles.getURLVar(req, "login_hash");
@@ -38,18 +37,14 @@ namespace carSharing.requestPermit
                 // Notify the owner of the car.
                 int owner_id = utilitles.getOwnerByVehicle( vehicle_id );
                 utilitles.notifyUserById("Car Request", "Someone has requested your car no. " + vehicle_id, owner_id);
+
                 response = new response(1, "Permit request created");
-                sc = HttpStatusCode.OK;
-                return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
 
             } catch (CarSharingException ex) {
                 response = new response(ex.status_code, "Error: " + ex.info);
-            
-                return req.CreateResponse(HttpStatusCode.InternalServerError, response, JsonMediaTypeFormatter.DefaultMediaType);
             }
 
-            
-        
+            return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
         }
         public static void createPermit(string user_id, string vehicle_id) {
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
