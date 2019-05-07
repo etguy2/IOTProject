@@ -19,15 +19,6 @@ namespace CarSharing.Exceptions
             this.status_code = status_code;
             this.info = info;
         }
-        public CarSharingException(string message, Exception innerException) {}
-        public CarSharingException(string message, string fileName) {}
-        public CarSharingException(string message, string fileName, Exception innerException) {}
-        protected CarSharingException(SerializationInfo info, StreamingContext context) {}
-
-        public override string Message { get; }
-        public string FileName { get; }
-        public string FusionLog { get; }
-
     }
     class InvalidInputException : CarSharingException {
 

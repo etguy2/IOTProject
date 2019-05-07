@@ -57,7 +57,7 @@ public static class utilitles {
         return tmp;
     }
 
-    public static bool validateUser(int user_id, string login_hash) {
+    public static void validateUser(int user_id, string login_hash) {
         string validate_query = "SELECT password_enc, enc_string FROM Users WHERE id = @user_id";
         string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
         bool status = false;
@@ -70,13 +70,11 @@ public static class utilitles {
                     string stored_login_hash = SHA.GenerateSHA256String((string)reader["password_enc"]+(string)reader["enc_string"]).ToLower();
                     if (stored_login_hash == login_hash)
                         status = true;
-                } else {
-                    throw new UserNotVerified(user_id.ToString());
                 }
             }
             conn.Close();
         }
-        return status;
+        if (!status) throw new UserNotVerified(user_id.ToString());
     }
         public static string notifyUserById(string title, string body, int user_id) {
             string validate_query = "SELECT notification_token FROM Users WHERE id = @user_id";

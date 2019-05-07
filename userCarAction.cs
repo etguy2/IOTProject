@@ -9,6 +9,8 @@ using Microsoft.Azure.WebJobs.Host;
 using System.Net.Http.Formatting;
 using System.Data.SqlClient;
 using CarSharing.Cryptography;
+using CarSharing.Exceptions;
+
 
 namespace carSharing.userCarAction
 {
@@ -18,29 +20,22 @@ namespace carSharing.userCarAction
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
 
-
-            // parse query parameter
-            string action = req.GetQueryNameValuePairs()
-                .FirstOrDefault(q => string.Compare(q.Key, "action", true) == 0)
-                .Value;
-            string login_hash = req.GetQueryNameValuePairs()
-                .FirstOrDefault(q => string.Compare(q.Key, "login_hash", true) == 0)
-                .Value;
-            string user_id = req.GetQueryNameValuePairs()
-                .FirstOrDefault(q => string.Compare(q.Key, "user_id", true) == 0)
-                .Value;
-            string vehicle_id = req.GetQueryNameValuePairs()
-                .FirstOrDefault(q => string.Compare(q.Key, "vehicle_id", true) == 0)
-                .Value;
-
             response response;
+            try {
+                // parse query parameter
+                string action = utilitles.getURLVar(req, "action");
+                string login_hash = utilitles.getURLVar(req, "login_hash");
+                string user_id = utilitles.getURLVar(req, "user_id");
+                string vehicle_id = utilitles.getURLVar(req, "vehicle_id");
 
-            // Verify user
-            if ( !utilitles.validateUser( System.Convert.ToInt32( user_id ) , login_hash ) ) {
-                response = new response(-1, "Invalid user Credentials");
-                return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
-            }
-
+                
+                // Verify user
+                utilitles.validateUser( System.Convert.ToInt32( user_id ) , login_hash );
+            } catch (CarSharingException ex) {
+                response = new response(ex.status_code, "Error: " + ex.info);
+            
+                return req.CreateResponse(HttpStatusCode.InternalServerError, response, JsonMediaTypeFormatter.DefaultMediaType);
+            }   
             bool status = false;
 
 
