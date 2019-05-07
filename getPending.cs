@@ -47,7 +47,7 @@ namespace carSharing.getPending
                     + "Vehicles.model, "
                     + "Vehicles.manufacturer, "
                     + "Vehicles.prod_year as year, "
-                    + "Users.FirstName as first_name, "
+                    + "Users.FirstName as first_name, " 
                     + "Users.LastName as last_name " 
                     + "FROM "
                     + "Permits "
