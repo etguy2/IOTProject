@@ -40,19 +40,19 @@ namespace carSharing.getPending
         }
         public static List<Permit> getPermits(int user_id, string status){
             List<Permit> permits =  new List<Permit>();
-            string get_permits = "SELECT"
-                    + "Permits.id as permit_id,"
-                    + "Permits.vehicle_id as vehicle_id,"
-                    + "Permits.time as reg_time,"
-                    + "Vehicles.model,"
-                    + "Vehicles.manufacturer,"
-                    + "Vehicles.year,"
-                    + "Users.FirstName as first_name,"
+            string get_permits = "SELECT "
+                    + "Permits.id as permit_id, "
+                    + "Permits.vehicle_id as vehicle_id, "
+                    + "Permits.time as reg_time, "
+                    + "Vehicles.model, "
+                    + "Vehicles.manufacturer, "
+                    + "Vehicles.year, "
+                    + "Users.FirstName as first_name, "
                     + "Users.LastName as last_name "
                     + "FROM "
                     + "Permits "
                     + "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id AND Permits.status = @status "
-                    + "INNER JOIN Users On Users.id = @user_id AND Users.id = Permits.user_id  ";
+                    + "INNER JOIN Users ON Users.id = @user_id AND Users.id = Permits.user_id  ";
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 SqlCommand command = new SqlCommand(get_permits, conn);
