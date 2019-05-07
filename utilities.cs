@@ -155,7 +155,7 @@ public static class utilitles {
                     if (reader.Read()) 
                         owner_id = (int)reader["owner_id"];
                     else
-                        throw new CarSharingException(3, "user_id"); 
+                        throw new VehicleNotFound(vehicle_id); 
                 }
                 conn.Close();
                 return owner_id;

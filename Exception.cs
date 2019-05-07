@@ -47,8 +47,8 @@ namespace CarSharing.Exceptions
         public UserNotVerified(string message) : base(-2, "user no. '"+message+"' could not be verified") {}
     }
 
-    class VehicleNotFound : CarSharingException2 {
+    class VehicleNotFound : CarSharingException {
         public VehicleNotFound() : base(-3, "Vehicle not found.") {}
-        public VehicleNotFound(string message) : base(-1, "Vehicle no. '"+message+"' not found in the DB.") {}
+        public VehicleNotFound(string message) : base(-3, "Vehicle no. '"+message+"' not found in the DB.") {}
     }
 }
