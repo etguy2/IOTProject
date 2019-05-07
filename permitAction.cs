@@ -24,7 +24,7 @@ namespace carSharing.PermitAction
                 int permit_id = Convert.ToInt32 ( utilitles.getURLVar(req, "permit_id") );
                 int user_id = Convert.ToInt32 ( utilitles.getURLVar(req, "user_id") );
                 string login_hash = utilitles.getURLVar(req, "login_hash");
-                int action =  Convert.ToInt32 ( utilitles.getURLVar(req, "permit_id") );
+                int action =  Convert.ToInt32 ( utilitles.getURLVar(req, "action") );
 
                 // Validates user identity.
                 utilitles.validateUser( user_id, login_hash );
