@@ -51,8 +51,8 @@ namespace carSharing.getPending
                     + "Users.LastName as last_name " 
                     + "FROM "
                     + "Permits "
-                    + "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id AND Permits.status = @status "
-                    + "INNER JOIN Users ON Users.id = @user_id AND Users.id = Permits.user_id  ";
+                    + "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id AND Permits.status = @status AND Vehicles.user_id = @user_id"
+                    + "INNER JOIN Users ON Users.id = Permits.user_id  ";
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 SqlCommand command = new SqlCommand(get_permits, conn);
@@ -71,10 +71,12 @@ namespace carSharing.getPending
         }
         private static string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
         private class PermitList {
+            public int status;
             public List<Permit> waiting;
             public List<Permit> approved;
 
             public PermitList(List<Permit> waiting, List<Permit> approved) {
+                this.status = 1;
                 this.waiting = waiting;
                 this.approved = approved;
             }
