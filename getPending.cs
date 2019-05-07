@@ -51,7 +51,7 @@ namespace carSharing.getPending
                     + "Users.LastName as last_name " 
                     + "FROM "
                     + "Permits "
-                    + "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id AND Permits.status = @status AND Vehicles.user_id = @user_id "
+                    + "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id AND Permits.status = @status AND Vehicles.owner_id = @user_id "
                     + "INNER JOIN Users ON Users.id = Permits.user_id  ";
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
