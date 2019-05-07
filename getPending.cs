@@ -81,11 +81,11 @@ namespace carSharing.getPending
         }
     }
     public class Permit {
-        int permit_id;
-        int vehicle_id;
-        string vehicle;
-        string user_name;
-        DateTime reg_time;
+        public int permit_id;
+        public int vehicle_id;
+        public string vehicle;
+        public string user_name;
+        public DateTime reg_time;
 
         public Permit(SqlDataReader reader) { 
             this.permit_id = (int)reader["permit_id"];
