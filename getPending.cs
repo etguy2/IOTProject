@@ -19,7 +19,7 @@ namespace carSharing.getPending
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
             try {
-
+                 
                 // parse query parameter
                 int user_id = Convert.ToInt32 ( utilitles.getURLVar(req, "user_id") );
                 string login_hash = utilitles.getURLVar(req, "login_hash");
@@ -27,8 +27,8 @@ namespace carSharing.getPending
                 // Validates user identity.
                 utilitles.validateUser( user_id, login_hash );
 
-                List<Permit> waiting_permits = getPermits(user_id, "WAITING");
-                List<Permit> approved_permits = getPermits(user_id, "APPROVED");
+                List<Permit> waiting_permits = getPermits(user_id, "WAITING", log);
+                List<Permit> approved_permits = getPermits(user_id, "APPROVED", log);
 
                 PermitList permits = new PermitList(waiting_permits, approved_permits);
                 return req.CreateResponse(HttpStatusCode.OK, permits, JsonMediaTypeFormatter.DefaultMediaType);
@@ -38,7 +38,7 @@ namespace carSharing.getPending
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
             }
         }
-        public static List<Permit> getPermits(int user_id, string status){
+        public static List<Permit> getPermits(int user_id, string status, TraceWriter log){
             List<Permit> permits =  new List<Permit>();
             string get_permits = "SELECT "
                     + "Permits.id as permit_id, "
@@ -61,6 +61,7 @@ namespace carSharing.getPending
                 //command.Parameters.AddWithValue("@limit",limit);
                 using (SqlDataReader reader = command.ExecuteReader()) {               
                     while (reader.Read()) {
+                        log.Info("Permit Added");
                         permits.Add(new Permit(reader));
                     }  
                 }
