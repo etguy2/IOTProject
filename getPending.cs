@@ -20,7 +20,7 @@ namespace carSharing.getPending
         {
             try {
                  
-                // parse query parameter
+                // parse query  parameter
                 int user_id = Convert.ToInt32 ( utilitles.getURLVar(req, "user_id") );
                 string login_hash = utilitles.getURLVar(req, "login_hash");
 
@@ -67,7 +67,7 @@ namespace carSharing.getPending
                 }
                 conn.Close();
             }
-            return permits;
+            return permits; 
         }
         private static string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
         private class PermitList {
