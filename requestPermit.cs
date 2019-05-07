@@ -31,6 +31,9 @@ namespace carSharing.requestPermit
                 // Validates user identity.
                 utilitles.validateUser( System.Convert.ToInt32( user_id ) , login_hash );
 
+                // Makes sure there are no simillar Permit requests on the DB
+                lookForSimilarPermits(Convert.ToInt32(user_id), Convert.ToInt32(vehicle_id));
+
                 // creates the request.
                 createPermit(user_id, vehicle_id);
 
@@ -46,7 +49,32 @@ namespace carSharing.requestPermit
 
             return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
         }
-        public static void createPermit(string user_id, string vehicle_id) {
+        private static void lookForSimilarPermits(int user_id, int vehicle_id) {
+            bool status = true;
+
+            // Defines tiem time treshold for the permit
+            DateTime permit_expiration_treshold = DateTime.Now;
+            permit_expiration_treshold = permit_expiration_treshold.AddMinutes( -1 * _permit_validity_time);
+
+            string look_for_similar = "SELECT COUNT(*) FROM Permits WHERE user_id = @user_id AND vehicle_id = @vehicle_id AND Permits.time >= Convert(datetime, @permit_expiration_treshold )";
+            using ( SqlConnection conn = new SqlConnection( _conn_str ) ) {
+                conn.Open();
+                SqlCommand command = new SqlCommand( look_for_similar, conn );
+                command.Parameters.AddWithValue("@user_id", user_id);
+                command.Parameters.AddWithValue("@vehicle_id", vehicle_id);
+                command.Parameters.AddWithValue("@permit_expiration_treshold", permit_expiration_treshold);
+
+                int rows = (int) command.ExecuteScalar();
+                if (rows >= 1) 
+                    status = false;
+                
+                conn.Close();
+            }
+            if (!status) throw new PermitRequestExists(user_id, vehicle_id);
+        }
+        private static int _permit_validity_time = Convert.ToInt32(System.Environment.GetEnvironmentVariable("permit_expiration"));
+
+        private static void createPermit(string user_id, string vehicle_id) {
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 string create_permit = "INSERT INTO Permits  (user_id, vehicle_id, status) values (@user_id, @vehicle_id, 'WAITING')";

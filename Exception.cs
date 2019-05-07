@@ -41,4 +41,10 @@ namespace CarSharing.Exceptions
         public NoPermit() : base(-4, "No Permit.") {}
         public NoPermit(int user_id, int vehicle_id) : base(-3, "User #"+user_id.ToString()+" Has no permit for car #"+vehicle_id.ToString()+".") {}
     }
+    class PermitRequestExists : CarSharingException {
+        int user_id;
+        int vehicle_id;
+        public PermitRequestExists() : base(-5, "Permit request exists.") {}
+        public PermitRequestExists(int user_id, int vehicle_id) : base(-3, "User #"+user_id.ToString()+" Already have a permit request for car #"+vehicle_id.ToString()+".") {}
+    }
 }
