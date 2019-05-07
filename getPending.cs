@@ -71,8 +71,8 @@ namespace carSharing.getPending
         }
         private static string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
         private class PermitList {
-            List<Permit> waiting;
-            List<Permit> approved;
+            public List<Permit> waiting;
+            public List<Permit> approved;
 
             public PermitList(List<Permit> waiting, List<Permit> approved) {
                 this.waiting = waiting;
