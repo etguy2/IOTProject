@@ -12,9 +12,13 @@ namespace CarSharing.Exceptions
     public class CarSharingException : System.IO.IOException
     {
         public int status_code;
+        public string info;
 
         public CarSharingException() { this.status_code = 0; }
-        public CarSharingException(int status_code, string message) { this.status_code = status_code; }
+        public CarSharingException(int status_code, string info) {
+            this.status_code = status_code;
+            this.info = info;
+        }
         public CarSharingException(string message, Exception innerException) {}
         public CarSharingException(string message, string fileName) {}
         public CarSharingException(string message, string fileName, Exception innerException) {}

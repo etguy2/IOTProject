@@ -40,17 +40,11 @@ namespace carSharing.requestPermit
                 utilitles.notifyUserById("Car Request", "Someone has requested your car no. " + vehicle_id, owner_id);
                 response = new response(1, "Permit request created");
                 sc = HttpStatusCode.OK;
-                log.Info("after");
-                 dbConnect db = new dbConnect(); 
-                db.insert_log("normal ");
                 return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);   
 
             } catch (CarSharingException ex) {
-                dbConnect db = new dbConnect();
-                db.insert_log("catched ");
-                response = new response(0, "Error CSE + " + ex.status_code.ToString()
-                );
-                log.Info("catched " + ex.Message);
+                response = new response(ex.status_code, "Error: " + ex.info);
+            
                 return req.CreateResponse(HttpStatusCode.InternalServerError, response, JsonMediaTypeFormatter.DefaultMediaType);
             }
 
