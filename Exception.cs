@@ -35,4 +35,10 @@ namespace CarSharing.Exceptions
         public VehicleNotFound() : base(-3, "Vehicle not found.") {}
         public VehicleNotFound(string message) : base(-3, "Vehicle no. '"+message+"' not found in the DB.") {}
     }
+    class NoPermit : CarSharingException {
+        int user_id;
+        int vehicle_id;
+        public NoPermit() : base(-4, "No Permit.") {}
+        public NoPermit(int user_id, int vehicle_id) : base(-3, "User #"+user_id.ToString()+" Has no permit for car #"+vehicle_id.ToString()+".") {}
+    }
 }

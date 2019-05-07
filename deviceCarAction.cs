@@ -50,7 +50,6 @@ namespace carSharing.deviceCarAction
                     }
                 }
                
-                
                 conn.Close();
                 return "";
             }

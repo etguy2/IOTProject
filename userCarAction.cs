@@ -11,7 +11,6 @@ using System.Data.SqlClient;
 using CarSharing.Cryptography;
 using CarSharing.Exceptions;
 
-
 namespace carSharing.userCarAction
 {
     public static class userCarAction
@@ -56,18 +55,13 @@ namespace carSharing.userCarAction
                     
                     conn.Close();
                 }
-                if (status) {
+                if (!status) throw new NoPermit(Convert.ToInt32(user_id), Convert.ToInt32(vehicle_id));
+                
                     response = new response(1, "Approved");
                     update_checkin();
 
-                } else {
-                    response = new response(-2, "No permit");
-                }
-                
-             } catch (CarSharingException ex) {
+            } catch (CarSharingException ex) {
                 response = new response(ex.status_code, "Error: " + ex.info);
-            
-                return req.CreateResponse(HttpStatusCode.InternalServerError, response, JsonMediaTypeFormatter.DefaultMediaType);
             }   
 
             return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
