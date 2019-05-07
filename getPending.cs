@@ -89,9 +89,9 @@ namespace carSharing.getPending
         public Permit(SqlDataReader reader) { 
             this.permit_id = (int)reader["permit_id"];
             this.vehicle_id = (int)reader["vehicle_id"];
-            this.vehicle =(string)reader["manufactureer"] + " " + (int)reader["model"] + " " + (int)reader["year"];
+            this.vehicle =(string)reader["manufacturer"] + " " + (int)reader["model"] + " " + (int)reader["year"];
             this.user_name = (string)reader["first_name"] + " " + (string)reader["last_name"];
             this.reg_time = (DateTime)reader["reg_time"];
-        }
+        } 
     }
 }
