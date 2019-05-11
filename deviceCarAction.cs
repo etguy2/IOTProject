@@ -26,7 +26,7 @@ namespace carSharing.deviceCarAction
 
             response = (status == true) ? "1" : "0";
 
-            return req.CreateResponse(HttpStatusCode.OK, status.ToString(), "text/plain");
+            return req.CreateResponse(HttpStatusCode.OK, response, "text/plain");
         }
 
         // Reversing the URL format of the MACID
