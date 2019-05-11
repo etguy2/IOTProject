@@ -76,87 +76,102 @@ public static class utilitles {
         }
         if (!status) throw new UserNotVerified(user_id.ToString());
     }
-        public static string notifyUserById(string title, string body, int user_id, data notify_data) {
-            string validate_query = "SELECT notification_token FROM Users WHERE id = @user_id";
-            
-            using (SqlConnection conn = new SqlConnection(_conn_str)) {
-                conn.Open();
-                SqlCommand command = new SqlCommand(validate_query, conn);
-                command.Parameters.AddWithValue("@user_id", user_id);
-                using (SqlDataReader reader = command.ExecuteReader()) {               
-                    if (reader.Read()) {
-                        return sendPush(title, body, (string)reader["notification_token"], notify_data);
-                    }
+    public static string notifyUserById(string title, string body, int user_id, data notify_data) {
+        string validate_query = "SELECT notification_token FROM Users WHERE id = @user_id";
+        
+        using (SqlConnection conn = new SqlConnection(_conn_str)) {
+            conn.Open();
+            SqlCommand command = new SqlCommand(validate_query, conn);
+            command.Parameters.AddWithValue("@user_id", user_id);
+            using (SqlDataReader reader = command.ExecuteReader()) {               
+                if (reader.Read()) {
+                    return sendPush(title, body, (string)reader["notification_token"], notify_data);
                 }
-                conn.Close();
             }
-            return "";
+            conn.Close();
         }
-        private static string sendPush(string title, string body, string target, data notify_data)
-        {
- 
-            var SERVER_API_KEY = System.Environment.GetEnvironmentVariable("server_api_key");
-            var SENDER_ID = System.Environment.GetEnvironmentVariable("sender_id");
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://fcm.googleapis.com/fcm/send");
-            httpWebRequest.ContentType = "application/json";
-            
-            httpWebRequest.Method = "POST";
-            httpWebRequest.Headers.Add(string.Format("Authorization: key={0}", SERVER_API_KEY));
-            httpWebRequest.Headers.Add(string.Format("Sender: id={0}", SENDER_ID));
-            notification_data nd = new notification_data();
-            nd.to = target;
-            nd.notification.title = title;
-            nd.notification.body = body;
-            nd.data = notify_data;
-            string postData = Newtonsoft.Json.JsonConvert.SerializeObject(nd);
-            // string postData = "{\"collapse_key\":\"score_update\",\"time_to_live\":108,\"delay_while_idle\":true,\"data\": { \"message\" : \"{\"title\":\""+message+"\"}},\"time\": \"" + System.DateTime.Now.ToString() + "\"},\"registration_ids\":[\"c9-5Opvw-FU:APA91bFV7GbXMVCkPD-4dABRED3fFmpGj-gpEyAPEb2WefQEX6fO1xQ_PaMexKwRHA4huZ-pvZlpSRjA8PLcn43sgoTey1yDJNoVnjt9u7JFmuEuRocZYTnoTtuLYkgUFAHZL9t-Jp9X\"]}";
-            //string postData = "{\"to\":\"c9-5Opvw-FU:APA91bFV7GbXMVCkPD-4dABRED3fFmpGj-gpEyAPEb2WefQEX6fO1xQ_PaMexKwRHA4huZ-pvZlpSRjA8PLcn43sgoTey1yDJNoVnjt9u7JFmuEuRocZYTnoTtuLYkgUFAHZL9t-Jp9X\", \"notification\":{\"title\":\""+title+"\", \"body\":\""+body+"\"}, \"data\":{\"message\":\"hello3\"}}";
-            Byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-            httpWebRequest.ContentLength = byteArray.Length;
-    
-            Stream dataStream = httpWebRequest.GetRequestStream();
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            dataStream.Close();
-    
-            WebResponse tResponse = httpWebRequest.GetResponse();
-    
-            dataStream = tResponse.GetResponseStream();
-    
-            StreamReader tReader = new StreamReader(dataStream);
-    
-            String sResponseFromServer = tReader.ReadToEnd();
-    
-            tReader.Close();
-            dataStream.Close();
-            tResponse.Close();
-            return sResponseFromServer + " " + postData;
-        }
-        private static readonly HttpClient client = new HttpClient();
-        public static string getURLVar(HttpRequestMessage req, string name) {
-            string res = req.GetQueryNameValuePairs()
-                    .FirstOrDefault(q => string.Compare(q.Key, name, true) == 0)
-                    .Value;
-            if (res == string.Empty)
-                throw new InvalidInputException(name);
-            return res;
-        }
+        return "";
+    }
+    private static string sendPush(string title, string body, string target, data notify_data)
+    {
 
-        public static int getOwnerByVehicle(string  vehicle_id) {
-            int owner_id = -1;
-            using (SqlConnection conn = new SqlConnection(_conn_str)) {
-                conn.Open();
-                string get_user_query = "SELECT owner_id FROM Vehicles WHERE id = @vehicle_id";
-                SqlCommand command = new SqlCommand(get_user_query, conn);
-                command.Parameters.AddWithValue("@vehicle_id", vehicle_id);
-                using (SqlDataReader reader = command.ExecuteReader()) {               
-                    if (reader.Read()) 
-                        owner_id = (int)reader["owner_id"];
-                    else
-                        throw new VehicleNotFound(vehicle_id); 
-                }
-                conn.Close();
-                return owner_id;
-                
+        var SERVER_API_KEY = System.Environment.GetEnvironmentVariable("server_api_key");
+        var SENDER_ID = System.Environment.GetEnvironmentVariable("sender_id");
+        var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://fcm.googleapis.com/fcm/send");
+        httpWebRequest.ContentType = "application/json";
+        
+        httpWebRequest.Method = "POST";
+        httpWebRequest.Headers.Add(string.Format("Authorization: key={0}", SERVER_API_KEY));
+        httpWebRequest.Headers.Add(string.Format("Sender: id={0}", SENDER_ID));
+        notification_data nd = new notification_data();
+        nd.to = target;
+        nd.notification.title = title;
+        nd.notification.body = body;
+        nd.data = notify_data;
+        string postData = Newtonsoft.Json.JsonConvert.SerializeObject(nd);
+        // string postData = "{\"collapse_key\":\"score_update\",\"time_to_live\":108,\"delay_while_idle\":true,\"data\": { \"message\" : \"{\"title\":\""+message+"\"}},\"time\": \"" + System.DateTime.Now.ToString() + "\"},\"registration_ids\":[\"c9-5Opvw-FU:APA91bFV7GbXMVCkPD-4dABRED3fFmpGj-gpEyAPEb2WefQEX6fO1xQ_PaMexKwRHA4huZ-pvZlpSRjA8PLcn43sgoTey1yDJNoVnjt9u7JFmuEuRocZYTnoTtuLYkgUFAHZL9t-Jp9X\"]}";
+        //string postData = "{\"to\":\"c9-5Opvw-FU:APA91bFV7GbXMVCkPD-4dABRED3fFmpGj-gpEyAPEb2WefQEX6fO1xQ_PaMexKwRHA4huZ-pvZlpSRjA8PLcn43sgoTey1yDJNoVnjt9u7JFmuEuRocZYTnoTtuLYkgUFAHZL9t-Jp9X\", \"notification\":{\"title\":\""+title+"\", \"body\":\""+body+"\"}, \"data\":{\"message\":\"hello3\"}}";
+        Byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+        httpWebRequest.ContentLength = byteArray.Length;
+
+        Stream dataStream = httpWebRequest.GetRequestStream();
+        dataStream.Write(byteArray, 0, byteArray.Length);
+        dataStream.Close();
+
+        WebResponse tResponse = httpWebRequest.GetResponse();
+
+        dataStream = tResponse.GetResponseStream();
+
+        StreamReader tReader = new StreamReader(dataStream);
+
+        String sResponseFromServer = tReader.ReadToEnd();
+
+        tReader.Close();
+        dataStream.Close();
+        tResponse.Close();
+        return sResponseFromServer + " " + postData;
+    }
+    private static readonly HttpClient client = new HttpClient();
+    public static string getURLVar(HttpRequestMessage req, string name) {
+        string res = req.GetQueryNameValuePairs()
+                .FirstOrDefault(q => string.Compare(q.Key, name, true) == 0)
+                .Value;
+        if (res == string.Empty)
+            throw new InvalidInputException(name);
+        return res;
+    }
+
+    public static int getOwnerByVehicle(string  vehicle_id) {
+        int owner_id = -1;
+        using (SqlConnection conn = new SqlConnection(_conn_str)) {
+            conn.Open();
+            string get_user_query = "SELECT owner_id FROM Vehicles WHERE id = @vehicle_id";
+            SqlCommand command = new SqlCommand(get_user_query, conn);
+            command.Parameters.AddWithValue("@vehicle_id", vehicle_id);
+            using (SqlDataReader reader = command.ExecuteReader()) {               
+                if (reader.Read()) 
+                    owner_id = (int)reader["owner_id"];
+                else
+                    throw new VehicleNotFound(vehicle_id); 
             }
+            conn.Close();
+            return owner_id;
+            
         }
+    }
+    public static string getUsernameById(int user_id) {
+        using (SqlConnection conn = new SqlConnection(_conn_str)) {
+            conn.Open();
+            string username = string.Empty;
+            string get_user_query = "SELECT FirstName, LastName FROM Users WHERE id = @user_id";
+            SqlCommand command = new SqlCommand(get_user_query, conn);
+            command.Parameters.AddWithValue("@vehicle_id", user_id);
+            using (SqlDataReader reader = command.ExecuteReader()) {               
+                if (reader.Read()) 
+                    username = (string)reader["FirstName"] + " " + (string)reader["LastName"];
+            }
+            conn.Close();
+            return username;
+        }
+    }
 }

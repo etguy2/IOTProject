@@ -40,6 +40,7 @@ namespace carSharing.requestPermit
                 // Notify the owner of the car.
                 int owner_id = utilitles.getOwnerByVehicle( vehicle_id );
                 data notify_data = new data(1, Convert.ToInt32(user_id), Convert.ToInt32(vehicle_id));
+                string username = utilitles.getUsernameById( Convert.ToInt32( user_id ) );
 
                 utilitles.notifyUserById("Car Request", "Someone has requested your car no. " + vehicle_id, owner_id, notify_data);
 
