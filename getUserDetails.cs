@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -6,6 +7,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using System.Data.SqlClient;
+using System.Collections.Generic;
 using System.Security.Cryptography;  
 using CarSharing.Cryptography;
 using System.Net.Http.Formatting;
@@ -43,6 +45,7 @@ namespace CarSharing.getUserDetails
                                 (string)reader["LastName"], 
                                 (string)reader["email"],
                                 (string)reader["licence_number"], "");
+                                usr.setPermits( getPermitsByUser( Convert.ToInt32(user_id) ) );
                                 return req.CreateResponse(HttpStatusCode.OK, usr, JsonMediaTypeFormatter.DefaultMediaType);
                         } else {
                             response res = new response(-1, "Bad Login Hash");
@@ -54,6 +57,24 @@ namespace CarSharing.getUserDetails
             }
             response res2 = new response(-2, "ERROR (Unknown)");
             return req.CreateResponse(HttpStatusCode.BadRequest, res2, JsonMediaTypeFormatter.DefaultMediaType);
+        }
+        private static List<Permit_small> getPermitsByUser(int user_id) {
+            string query =  "SELECT vehicle_id, time, status FROM Permits WHERE user_id = @user_id";
+            List<Permit_small> permits = new List<Permit_small>();
+
+            string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
+            using (SqlConnection conn = new SqlConnection(_conn_str)) {
+                conn.Open();
+                SqlCommand command = new SqlCommand(query, conn);
+                command.Parameters.AddWithValue("@user_id", user_id);
+                using (SqlDataReader reader = command.ExecuteReader()) {  
+                    while (reader.Read()) {
+                        permits.Add(new Permit_small((int)reader["vehicle_id"], (string)reader["status"], (DateTime)reader["time"]));
+                    }
+                }
+                conn.Close();
+            }
+            return permits;
         }
     }
 }
