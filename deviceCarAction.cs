@@ -24,7 +24,7 @@ namespace carSharing.deviceCarAction
             // Makes sure the user has matched all the restrictions to unlock the car.
             bool status = verifyCheckin( formatMACID( macid ) );
 
-            response = (status) ? 1 : 0;
+            response = (status) ? '1' : '0';
 
             return req.CreateResponse(HttpStatusCode.OK, status.ToString(), "text/plain");
         }
