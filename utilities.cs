@@ -165,7 +165,7 @@ public static class utilitles {
             string username = string.Empty;
             string get_user_query = "SELECT FirstName, LastName FROM Users WHERE id = @user_id";
             SqlCommand command = new SqlCommand(get_user_query, conn);
-            command.Parameters.AddWithValue("@vehicle_id", user_id);
+            command.Parameters.AddWithValue("@user_id", user_id);
             using (SqlDataReader reader = command.ExecuteReader()) {               
                 if (reader.Read()) 
                     username = (string)reader["FirstName"] + " " + (string)reader["LastName"];
