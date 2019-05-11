@@ -34,7 +34,7 @@ namespace carSharing.deviceCarAction
             return macid.Replace('_', ':');
         }
         private static string notifyOwner(string macid) {
-            string get_user_query = "SELECT Vehicles.owner_id, Users.FirstName, Users.LastName FROM Vehicles "
+            string get_user_query = "SELECT Vehicles.owner_id, Vehicles.id as vehicle_id, Users.id as user_id, Users.FirstName, Users.LastName FROM Vehicles "
                                     + "INNER JOIN Permits ON Permits.status = 'APPROVED'"
                                     + "INNER JOIN Devices ON Devices.MACID = @macid AND Vehicles.device_id = Devices.id "
                                     + "INNER JOIN Users ON Users.id = Permits.user_id";
@@ -46,7 +46,8 @@ namespace carSharing.deviceCarAction
                 using (SqlDataReader reader = command.ExecuteReader()) {               
                     if (reader.Read()) {
                         string name = (string)reader["FirstName"] + " " + (string)reader["LastName"];
-                        return utilitles.notifyUserById("Car Unlocked", name + " Has just unlocked your car", (int)reader["owner_id"]);
+                        data notify_data = new data(3, (int)reader["user_id"], (int)reader["vehicle_id"]);
+                        return utilitles.notifyUserById("Car Unlocked", name + " Has just unlocked your car", (int)reader["owner_id"], notify_data);
                     }
                 }
                

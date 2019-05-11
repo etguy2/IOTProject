@@ -76,7 +76,7 @@ public static class utilitles {
         }
         if (!status) throw new UserNotVerified(user_id.ToString());
     }
-        public static string notifyUserById(string title, string body, int user_id) {
+        public static string notifyUserById(string title, string body, int user_id, data notify_data) {
             string validate_query = "SELECT notification_token FROM Users WHERE id = @user_id";
             
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
@@ -85,14 +85,14 @@ public static class utilitles {
                 command.Parameters.AddWithValue("@user_id", user_id);
                 using (SqlDataReader reader = command.ExecuteReader()) {               
                     if (reader.Read()) {
-                        return sendPush(title, body, (string)reader["notification_token"]);
+                        return sendPush(title, body, (string)reader["notification_token"], notify_data);
                     }
                 }
                 conn.Close();
             }
             return "";
         }
-        private static string sendPush(string title, string body, string target)
+        private static string sendPush(string title, string body, string target, data notify_data)
         {
  
             var SERVER_API_KEY = System.Environment.GetEnvironmentVariable("server_api_key");
@@ -107,8 +107,7 @@ public static class utilitles {
             nd.to = target;
             nd.notification.title = title;
             nd.notification.body = body;
-            nd.data.action = 1;
-            nd.data.message = "Inner Message";
+            nd.data = notify_data;
             string postData = Newtonsoft.Json.JsonConvert.SerializeObject(nd);
             // string postData = "{\"collapse_key\":\"score_update\",\"time_to_live\":108,\"delay_while_idle\":true,\"data\": { \"message\" : \"{\"title\":\""+message+"\"}},\"time\": \"" + System.DateTime.Now.ToString() + "\"},\"registration_ids\":[\"c9-5Opvw-FU:APA91bFV7GbXMVCkPD-4dABRED3fFmpGj-gpEyAPEb2WefQEX6fO1xQ_PaMexKwRHA4huZ-pvZlpSRjA8PLcn43sgoTey1yDJNoVnjt9u7JFmuEuRocZYTnoTtuLYkgUFAHZL9t-Jp9X\"]}";
             //string postData = "{\"to\":\"c9-5Opvw-FU:APA91bFV7GbXMVCkPD-4dABRED3fFmpGj-gpEyAPEb2WefQEX6fO1xQ_PaMexKwRHA4huZ-pvZlpSRjA8PLcn43sgoTey1yDJNoVnjt9u7JFmuEuRocZYTnoTtuLYkgUFAHZL9t-Jp9X\", \"notification\":{\"title\":\""+title+"\", \"body\":\""+body+"\"}, \"data\":{\"message\":\"hello3\"}}";

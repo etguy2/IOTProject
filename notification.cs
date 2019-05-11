@@ -10,7 +10,13 @@ public struct notification {
         public string title;
         public string body;
 }
-public struct data {
+public class data {
         public int action;
-        public string message;
+        public int vehicle_id;
+        public int user_id;
+        public data (int action, int user_id, int vehicle_id) {
+                this.action = action;
+                this.user_id = user_id;
+                this.vehicle_id = vehicle_id;
+        }
 }
