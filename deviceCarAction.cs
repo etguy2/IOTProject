@@ -19,12 +19,12 @@ namespace carSharing.deviceCarAction
             // parse query parameter
             string macid = utilitles.getURLVar(req, "macid");
 
-            int response;
+            string response;
 
             // Makes sure the user has matched all the restrictions to unlock the car.
             bool status = verifyCheckin( formatMACID( macid ) );
 
-            response = (status) ? '1' : '0';
+            response = (status == true) ? "1" : "0";
 
             return req.CreateResponse(HttpStatusCode.OK, status.ToString(), "text/plain");
         }
