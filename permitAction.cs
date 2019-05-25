@@ -35,7 +35,7 @@ namespace carSharing.PermitAction
 
                 string[] new_status = new string[] { "DENIED", "APPROVED" };
 
-                update_permit_status(vehicle_id, user_id, new_status[action]);
+                update_permit_status(vehicle_id, renter_id, new_status[action]);
                 response = new response(1, "Permit " + new_status[action]);
 
             } catch (CarSharingException ex) {
