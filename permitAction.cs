@@ -39,7 +39,7 @@ namespace carSharing.PermitAction
                 response = new response(1, "Permit " + new_status[action]);
 
                 data notify_data = new data(action + 2, 0, 0);
-                utilitles.notifyUserById("Access " + new_status[action], "Your request to use car no. " + vehicle_id + "Has been " + new_status[action], renter_id, notify_data);
+                utilitles.notifyUserById("Access " + new_status[action], "Your request to use car no. " + vehicle_id + " Has been " + new_status[action], renter_id, notify_data);
 
             } catch (CarSharingException ex) {
                 response = new response(ex.status_code, "Error: " + ex.info);
