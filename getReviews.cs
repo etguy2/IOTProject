@@ -45,7 +45,7 @@ namespace CarSharing.getReviews
         private static double getAvgReview(int reviewee_id) {
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
-                string avg_review = "SELECT AVG(Cast(rate as Float)) FROM Reviews WHERE reviewee_id = @reviewee_id ORDER BY id DESC";
+                string avg_review = "SELECT AVG(Cast(rate as Float)) FROM Reviews WHERE reviewee_id = @reviewee_id";
                 SqlCommand command = new SqlCommand(avg_review, conn);
                 command.Parameters.AddWithValue("@reviewee_id", reviewee_id);
                 double avg = (double)command.ExecuteScalar();
@@ -57,7 +57,7 @@ namespace CarSharing.getReviews
             List<Review> Reviews = new List<Review>();
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
-                string avg_review = "SELECT cont, rate, reg_time FROM Reviews WHERE reviewee_id = @reviewee_id";
+                string avg_review = "SELECT cont, rate, reg_time FROM Reviews WHERE reviewee_id = @reviewee_id ORDER BY id DESC";
                 SqlCommand command = new SqlCommand(avg_review, conn);
                 command.Parameters.AddWithValue("@reviewee_id", reviewee_id);
                 using (SqlDataReader reader = command.ExecuteReader()) {               
