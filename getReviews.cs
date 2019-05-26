@@ -38,7 +38,7 @@ namespace CarSharing.getReviews
                 response = new response(ex.status_code, "Error: " + ex.info);
             }
 
-            return response.status == 1 ? req.CreateResponse(HttpStatusCode.OK, r_response, JsonMediaTypeFormatter.DefaultMediaType);
+            return response.status == 1 ? req.CreateResponse(HttpStatusCode.OK, r_response, JsonMediaTypeFormatter.DefaultMediaType)
             : req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
         }
         private static double getAvgReview(int reviewee_id) {
