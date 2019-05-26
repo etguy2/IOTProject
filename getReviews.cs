@@ -33,7 +33,7 @@ namespace CarSharing.getReviews
                 r_response.status = 1;
 
                 r_response.avg_rate = getAvgReview(reviewee_id);
-                //r_response.reviews = getReviewList(reviewee_id);
+                r_response.reviews = getReviewList(reviewee_id);
 
             } catch (CarSharingException ex) {
                 response = new response(ex.status_code, "Error: " + ex.info);
@@ -48,7 +48,7 @@ namespace CarSharing.getReviews
                 string avg_review = "SELECT AVG(rate) FROM Reviews WHERE reviewee_id = @reviewee_id";
                 SqlCommand command = new SqlCommand(avg_review, conn);
                 command.Parameters.AddWithValue("@reviewee_id", reviewee_id);
-                double avg = (double) command.ExecuteScalar();
+                double avg = (double)(int) command.ExecuteScalar();
                 conn.Close();
                 return avg;
             }
