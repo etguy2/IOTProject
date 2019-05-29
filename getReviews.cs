@@ -33,7 +33,7 @@ namespace CarSharing.getReviews
                 r_response.status = 1;
 
                 r_response.avg_rate = getAvgReview(reviewee_id);
-                //r_response.reviews = getReviewList(reviewee_id);
+                r_response.reviews = getReviewList(reviewee_id);
 
             } catch (CarSharingException ex) {
                 response = new response(ex.status_code, "Error: " + ex.info);
@@ -45,10 +45,10 @@ namespace CarSharing.getReviews
         private static double getAvgReview(int reviewee_id) {
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
-                string avg_review = "SELECT AVG(Cast(rate as Float)) FROM Reviews WHERE reviewee_id = @reviewee_id";
+                string avg_review = "SELECT COALESCE(AVG(Cast(rate as Float)), -1) FROM Reviews WHERE reviewee_id = @reviewee_id";
                 SqlCommand command = new SqlCommand(avg_review, conn);
                 command.Parameters.AddWithValue("@reviewee_id", reviewee_id);
-                double avg = (double)(int)command.ExecuteScalar();
+                double avg = (double)command.ExecuteScalar();
                 conn.Close();
                 return avg;
             }
