@@ -32,8 +32,8 @@ namespace CarSharing.getReviews
                 response.status = 1;
                 r_response.status = 1;
 
-                //r_response.avg_rate = getAvgReview(reviewee_id);
-                r_response.reviews = getReviewList(reviewee_id);
+                r_response.avg_rate = getAvgReview(reviewee_id);
+                //r_response.reviews = getReviewList(reviewee_id);
 
             } catch (CarSharingException ex) {
                 response = new response(ex.status_code, "Error: " + ex.info);
