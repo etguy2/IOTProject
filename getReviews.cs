@@ -48,7 +48,7 @@ namespace CarSharing.getReviews
                 string avg_review = "SELECT AVG(Cast(rate as Float)) FROM Reviews WHERE reviewee_id = @reviewee_id";
                 SqlCommand command = new SqlCommand(avg_review, conn);
                 command.Parameters.AddWithValue("@reviewee_id", reviewee_id);
-                double avg = (double)command.ExecuteScalar();
+                double avg = (double)(int)command.ExecuteScalar();
                 conn.Close();
                 return avg;
             }
