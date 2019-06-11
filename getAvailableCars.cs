@@ -24,7 +24,7 @@ namespace CarSharing.getAvailableCars
             string get_cars_query =  "SELECT Vehicles.id as id, Vehicles.prod_year as year, Devices.lat, Devices.lng, "
                 +"Vehicles.model, Vehicles.mode, Users.id as ownerid, Vehicles.manufacturer "
                 +"FROM Devices "
-                +"INNER JOIN Vehicles ON Vehicles.device_id = Devices.id "
+                +"INNER JOIN Vehicles ON Vehicles.device_id = Devices.id AND Vehicles.status = 'ACTIVATED'"
                 +"INNER JOIN Users ON Users.id = Vehicles.owner_id";
 
             // Task vars 

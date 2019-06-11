@@ -43,7 +43,7 @@ namespace CarSharing.myCars
             List<Car> Cars = new List<Car>();
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
-                string getCars = "SELECT id, manufacturer, mode, model, prod_year FROM Vehicles WHERE owner_id = @owner_id ORDER BY id DESC";
+                string getCars = "SELECT id, manufacturer, mode, model, prod_year, status FROM Vehicles WHERE owner_id = @owner_id ORDER BY id DESC";
                 SqlCommand command = new SqlCommand(getCars, conn);
                 command.Parameters.AddWithValue("@owner_id", owner_id);
                 using (SqlDataReader reader = command.ExecuteReader()) {               
@@ -61,6 +61,7 @@ namespace CarSharing.myCars
             public int prod_year;
             public string manufacturer;
             public int mode;
+            public string status;
             public string model;
             public Car(SqlDataReader reader) {
                 this.id = (int)reader["id"];
@@ -68,6 +69,7 @@ namespace CarSharing.myCars
                 this.manufacturer = (string)reader["manufacturer"];
                 this.mode = (int)reader["mode"];
                 this.model = (string)reader["model"];
+                this.status = (string)reader["status"];
             }
         }
     }
