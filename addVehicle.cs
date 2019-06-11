@@ -39,9 +39,7 @@ namespace CarSharing.addVehicle
             } catch (CarSharingException ex) {
                 response = new response(ex.status_code, "Error: " + ex.info);
             }
-
-
-            req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
+            return req.CreateResponse(HttpStatusCode.OK, response, JsonMediaTypeFormatter.DefaultMediaType);
         }
     }
 }
