@@ -22,9 +22,6 @@ namespace CarSharing.getUserDetails
             log.Info("C# HTTP trigger function processed a request.");
 
             // parse query parameter
-            string login_hash = req.GetQueryNameValuePairs()
-                .FirstOrDefault(q => string.Compare(q.Key, "login_hash", true) == 0)
-                .Value;
             string user_id = req.GetQueryNameValuePairs()
                 .FirstOrDefault(q => string.Compare(q.Key, "user_id", true) == 0)
                 .Value;
@@ -38,19 +35,14 @@ namespace CarSharing.getUserDetails
                 command.Parameters.AddWithValue("@user_id", user_id);
                 using (SqlDataReader reader = command.ExecuteReader()) {               
                     if (reader.Read()) {
-                        string user_hash = SHA.GenerateSHA256String((string)reader["password_enc"]+(string)reader["enc_string"]).ToLower();
-                        if (string.Compare(user_hash, login_hash) == 0) {
-                            user usr = new user((int)reader["id"],
-                                (string)reader["FirstName"],
-                                (string)reader["LastName"], 
-                                (string)reader["email"],
-                                (string)reader["licence_number"], "");
-                                usr.setPermits( getPermitsByUser( Convert.ToInt32(user_id) ) );
-                                return req.CreateResponse(HttpStatusCode.OK, usr, JsonMediaTypeFormatter.DefaultMediaType);
-                        } else {
-                            response res = new response(-1, "Bad Login Hash");
-                            return req.CreateResponse(HttpStatusCode.BadRequest, res, JsonMediaTypeFormatter.DefaultMediaType);
-                        }
+
+                        user usr = new user((int)reader["id"],
+                            (string)reader["FirstName"],
+                            (string)reader["LastName"], 
+                            (string)reader["email"],
+                            (string)reader["licence_number"], "");
+                            usr.setPermits( getPermitsByUser( Convert.ToInt32(user_id) ) );
+                            return req.CreateResponse(HttpStatusCode.OK, usr, JsonMediaTypeFormatter.DefaultMediaType);
                     }  
                 }
                 conn.Close();

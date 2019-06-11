@@ -24,7 +24,7 @@ namespace CarSharing.setVehicleStatus
                 int user_id = Convert.ToInt32(utilitles.getURLVar(req, "user_id"));
                 string login_hash = utilitles.getURLVar(req, "login_hash");
                 int vehicle_id = Convert.ToInt32(utilitles.getURLVar(req, "vehicle_id"));
-                string new_status = utilitles.getURLVar(req, "status");
+                string new_status = utilitles.getURLVar(req, "status"); // 'ACTIVATED', 'DEACTIVATED', 'IN-USE'
 
                 // Validates user identity.
                 utilitles.validateUser( user_id , login_hash );
