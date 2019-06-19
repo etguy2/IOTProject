@@ -63,8 +63,7 @@ namespace carSharing.deviceCarAction
             // Look for the right checkin in the DB
             string checkin_query =  "SELECT COUNT(*) FROM Permits "
                                     + "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id "
-                                    + "INNER JOIN Devices ON Vehicles.device_id = Devices.id AND Devices.MACID = @macid "
-                                    + "AND Permits.checkin >= Convert(datetime, @checkin_expiration_treshold )";
+                                    + "INNER JOIN Devices ON Vehicles.device_id = Devices.id AND Devices.MACID = @macid";
 
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
