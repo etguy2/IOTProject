@@ -73,7 +73,7 @@ namespace carSharing.deviceCarAction
                 int rows = (int) command.ExecuteScalar();
                 if (rows >= 1) {
                     status = true;
-                    notifyOwner(macid);
+                    //notifyOwner(macid);
                 }
                 
                 conn.Close();
