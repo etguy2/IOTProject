@@ -8,6 +8,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using System.Net.Http.Formatting;
 using System.Data.SqlClient;
+using CarSharing.Exceptions;
 
 namespace carSharing.deviceCarAction
 {
@@ -17,12 +18,22 @@ namespace carSharing.deviceCarAction
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
             // parse query parameter
-            string macid = utilitles.getURLVar(req, "macid");
-
             string response;
+            bool status;
+            string macid = utilitles.getURLVar(req, "macid");
+            string user_data = utilitles.getURLVar(req, "user_data");
+            int user_id = Convert.ToInt32(Convert.ToByte(user_data.Substring(0, 1)));
+            string login_hash = user_data.Substring(1, 64);
 
+            try {
+                utilitles.validateUser( user_id , login_hash );
+                status = verifyCheckin( formatMACID( macid ) );
+            } catch (CarSharingException ex) {
+                status = false;
+            }
+            
             // Makes sure the user has matched all the restrictions to unlock the car.
-            bool status = verifyCheckin( formatMACID( macid ) );
+            
 
             response = (status == true) ? "1" : "0";
 
