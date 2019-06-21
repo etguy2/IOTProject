@@ -25,11 +25,17 @@ namespace carSharing.addReview
                 int rate = Convert.ToInt32(utilitles.getURLVar(req, "rate"));
                 string cont = utilitles.getURLVar(req, "cont");
                 string login_hash = utilitles.getURLVar(req, "login_hash");
+                
+                // History vars
+                string hisCost = utilitles.getURLVar(req, "cost");
+                string hisDate = utilitles.getURLVar(req, "date");
+                int vehicle_id = Convert.ToInt32(utilitles.getURLVar(req, "car_id"));
 
                 // Validates user identity.
                 utilitles.validateUser( reviewer_id , login_hash );
 
                 insertReview(reviewer_id, reviewee_id, rate, cont);
+                insertHistory(reviewer_id, hisCost, hisDate, vehicle_id);
 
                 response = new response(1, "Review added");
 
@@ -48,6 +54,19 @@ namespace carSharing.addReview
                 command.Parameters.AddWithValue("@reviewee_id", reviewee_id);
                 command.Parameters.AddWithValue("@rate", rate);
                 command.Parameters.AddWithValue("@cont", cont);
+                command.ExecuteNonQuery();
+                conn.Close();
+            }
+        }
+        private static void insertHistory(int user_id, string hisCost, string hisDate, int vehicle_id) {
+            using (SqlConnection conn = new SqlConnection(_conn_str)) {
+                conn.Open();
+                string create_permit = "INSERT INTO History (user_id, hisCost, hisDate, hisLisence) values (@user_id, @hisCost, @hisDate, @vehicle_id)";
+                SqlCommand command = new SqlCommand(create_permit, conn);
+                command.Parameters.AddWithValue("@user_id", user_id);
+                command.Parameters.AddWithValue("@hisCost", hisCost);
+                command.Parameters.AddWithValue("@hisDate", hisDate);
+                command.Parameters.AddWithValue("@vehicle_id", vehicle_id);
                 command.ExecuteNonQuery();
                 conn.Close();
             }
