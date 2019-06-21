@@ -51,7 +51,7 @@ namespace carSharing.PermitAction
         }
         private static void update_permit_status(int vehicle_id, int renter_id, string new_status, string otk) {
             DateTime checkin = DateTime.Now;
-            string update_checkin = "UPDATE Permits SET status = @status AND user_id = @renter_id AND otkey = @otk WHERE vehicle_id = @vehicle_id";
+            string update_checkin = "UPDATE Permits SET otkey = @otk, status = @status WHERE vehicle_id = @vehicle_id AND user_id = @renter_id";
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 SqlCommand command = new SqlCommand(update_checkin, conn);
