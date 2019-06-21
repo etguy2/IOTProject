@@ -42,7 +42,7 @@ namespace carSharing.deviceCarAction
             // Makes sure the user has matched all the restrictions to unlock the car.
             
 
-            response = (status == true) ? getOTK(macid) : "0";
+            response = (status == true) ? getOTK( formatMACID( macid ) ) : "0";
             log.Info("response : " + response);
    
             return req.CreateResponse(HttpStatusCode.OK, response, "text/plain");
