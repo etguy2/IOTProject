@@ -43,6 +43,7 @@ namespace carSharing.deviceCarAction
             
 
             response = (status == true) ? getOTK(macid) : "0";
+            log.Info("response : " + response);
    
             return req.CreateResponse(HttpStatusCode.OK, response, "text/plain");
         }
@@ -77,13 +78,14 @@ namespace carSharing.deviceCarAction
             string response = "";
             string otk_query =  "SELECT otkey, user_id from Permits INNER JOIN Devices ON Devices.MACID = @MACID " +
                                     "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id AND Vehicles.device_id = Devices.id";
+                                    
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
                 SqlCommand command = new SqlCommand(otk_query, conn);
                 command.Parameters.AddWithValue("@MACID", MACID);
                 using (SqlDataReader reader = command.ExecuteReader()) {               
                     if (reader.Read()) {
-                        response = (string)reader["user_id"] + (string)reader["otkey"];
+                        response = (string)reader["user_id"].ToString() + (string)reader["otkey"];
                     }
                 }
             conn.Close();
