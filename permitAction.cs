@@ -35,7 +35,9 @@ namespace carSharing.PermitAction
 
                 string[] new_status = new string[] { "DENIED", "APPROVED" };
                 string OTK = utilitles.RandomString(30);
+                log.Info("OTK:" + OTK);
                 update_permit_status(vehicle_id, renter_id, new_status[action], OTK);
+                log.Info("Permit STATUS UPDATED TO OTK: " +  OTK +  "where vehicle is : " + vehicle_id);
                 response = new response(1, "Permit " + new_status[action]);
 
                 data notify_data = new data(action + 2, 0, 0, OTK);
@@ -59,6 +61,7 @@ namespace carSharing.PermitAction
                 command.Parameters.AddWithValue("@otk", otk);
                 command.ExecuteNonQuery();
                 conn.Close();
+                
             }
         }
         private static string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
