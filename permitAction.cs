@@ -38,7 +38,7 @@ namespace carSharing.PermitAction
                 update_permit_status(vehicle_id, renter_id, new_status[action], OTK);
                 response = new response(1, "Permit " + new_status[action]);
 
-                data notify_data = new data(action + 2, 0, 0, utilitles.RandomString(30));
+                data notify_data = new data(action + 2, 0, 0, OTK);
                 utilitles.notifyUserById("Access " + new_status[action], "Your request to use car no. " + vehicle_id + " Has been " + new_status[action], renter_id, notify_data);
 
             } catch (CarSharingException ex) {
