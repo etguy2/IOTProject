@@ -49,7 +49,7 @@ namespace CarSharing.getUserAllHistory
                 command.Parameters.AddWithValue("@user_id", user_id);
                 using (SqlDataReader reader = command.ExecuteReader()) {               
                     while (reader.Read()) {
-                        Events.Add(new History_row((int)reader["hisCost"],(string)reader["hisDate"],(string)reader["hisLisence"]));
+                        Events.Add(new History_row((string)reader["hisCost"],(string)reader["hisDate"],(string)reader["hisLisence"]));
                     }  
                 }
                 conn.Close();
@@ -58,10 +58,10 @@ namespace CarSharing.getUserAllHistory
         }
         private static string _conn_str = System.Environment.GetEnvironmentVariable("sqldb_connection");
         private class History_row {
-            public int hisCost;
+            public string hisCost;
             public string hisDate;
             public string hisLisence;
-            public History_row(int hisCost, string hisDate, string hisLisence) {
+            public History_row(string hisCost, string hisDate, string hisLisence) {
                 this.hisCost = hisCost;
                 this.hisDate = hisDate;
                 this.hisLisence = hisLisence;
