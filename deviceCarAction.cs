@@ -25,13 +25,14 @@ namespace carSharing.deviceCarAction
             string user_data = utilitles.getURLVar(req, "user_data");
 
 
-            int user_id = Convert.ToInt32(user_data.Substring(0, 1));
-            string login_hash = user_data.Substring(1, 64);
+            //int user_id = Convert.ToInt32(user_data.Substring(0, 1));
+            //string login_hash = user_data.Substring(1, 64);
 
             try { 
 
-                utilitles.validateUser( user_id , login_hash );
+                //utilitles.validateUser( user_id , login_hash );
                 status = verifyCheckin( formatMACID( macid ) );
+                
 
             } catch (CarSharingException ex) {
 
@@ -41,8 +42,8 @@ namespace carSharing.deviceCarAction
             // Makes sure the user has matched all the restrictions to unlock the car.
             
 
-            response = (status == true) ? "1" : "0";
-
+            response = (status == true) ? getOTK(macid) : "0";
+   
             return req.CreateResponse(HttpStatusCode.OK, response, "text/plain");
         }
 
@@ -50,27 +51,44 @@ namespace carSharing.deviceCarAction
         private static string formatMACID(string macid) {
             return macid.Replace('_', ':');
         }
-        private static string notifyOwner(string macid) {
-            string get_user_query = "SELECT Vehicles.owner_id, Vehicles.id as vehicle_id, Users.id as user_id, Users.FirstName, Users.LastName FROM Vehicles "
-                                    + "INNER JOIN Permits ON Permits.status = 'APPROVED'"
-                                    + "INNER JOIN Devices ON Devices.MACID = @macid AND Vehicles.device_id = Devices.id "
-                                    + "INNER JOIN Users ON Users.id = Permits.user_id";
+        // private static string notifyOwner(string macid) {
+        //     string get_user_query = "SELECT Vehicles.owner_id, Vehicles.id as vehicle_id, Users.id as user_id, Users.FirstName, Users.LastName FROM Vehicles "
+        //                             + "INNER JOIN Permits ON Permits.status = 'APPROVED'"
+        //                             + "INNER JOIN Devices ON Devices.MACID = @macid AND Vehicles.device_id = Devices.id "
+        //                             + "INNER JOIN Users ON Users.id = Permits.user_id";
 
+        //     using (SqlConnection conn = new SqlConnection(_conn_str)) {
+        //         conn.Open();
+        //         SqlCommand command = new SqlCommand(get_user_query, conn);
+        //         command.Parameters.AddWithValue("@macid", macid);
+        //         using (SqlDataReader reader = command.ExecuteReader()) {               
+        //             if (reader.Read()) {
+        //                 string name = (string)reader["FirstName"] + " " + (string)reader["LastName"];
+        //                 data notify_data = new data(3, (int)reader["user_id"], (int)reader["vehicle_id"]);
+        //                 return utilitles.notifyUserById("Car Unlocked", name + " Has just unlocked your car", (int)reader["owner_id"], notify_data);
+        //             }
+        //         }
+               
+        //         conn.Close();
+        //         return "";
+        //     }
+        // }
+        private static string getOTK(string MACID) {
+            string response = "";
+            string otk_query =  "SELECT OTK, user_id from Permits INNER JOIN Devices ON Devices.MACID = @MACID" +
+                                    "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id AND Vehicles.device_id = Devices.id";
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
-                SqlCommand command = new SqlCommand(get_user_query, conn);
-                command.Parameters.AddWithValue("@macid", macid);
+                SqlCommand command = new SqlCommand(otk_query, conn);
+                command.Parameters.AddWithValue("@MACID", MACID);
                 using (SqlDataReader reader = command.ExecuteReader()) {               
                     if (reader.Read()) {
-                        string name = (string)reader["FirstName"] + " " + (string)reader["LastName"];
-                        data notify_data = new data(3, (int)reader["user_id"], (int)reader["vehicle_id"]);
-                        return utilitles.notifyUserById("Car Unlocked", name + " Has just unlocked your car", (int)reader["owner_id"], notify_data);
+                        response = (string)reader["user_id"] + (string)reader["OTK"];
                     }
                 }
-               
-                conn.Close();
-                return "";
+            conn.Close();
             }
+            return response;
         }
         private static bool verifyCheckin(string macid) {
             bool status = false;
