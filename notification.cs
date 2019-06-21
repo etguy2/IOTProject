@@ -14,9 +14,12 @@ public class data {
         public int action;
         public int vehicle_id;
         public int user_id;
-        public data (int action, int user_id, int vehicle_id) {
+
+        public string OTK;
+        public data (int action, int user_id, int vehicle_id, string OTK) {
                 this.action = action;
                 this.user_id = user_id;
                 this.vehicle_id = vehicle_id;
+                this.OTK = OTK;
         }
 }
