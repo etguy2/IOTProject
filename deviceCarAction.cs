@@ -20,14 +20,17 @@ namespace carSharing.deviceCarAction
             // parse query parameter
             string response;
             bool status;
+
             string macid = utilitles.getURLVar(req, "macid");
-            string user_data = utilitles.getURLVar(req, "user_data");
-            int user_id = Convert.ToInt32(user_data.Substring(0, 1));
-            string login_hash = user_data.Substring(1, 64);
+            //string user_data = utilitles.getURLVar(req, "user_data");
+
+
+           // int user_id = Convert.ToInt32(user_data.Substring(0, 1));
+            //string login_hash = user_data.Substring(1, 64);
 
             try { 
 
-                utilitles.validateUser( user_id , login_hash );
+               // utilitles.validateUser( user_id , login_hash );
                 status = verifyCheckin( formatMACID( macid ) );
 
             } catch (CarSharingException ex) {
