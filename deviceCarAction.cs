@@ -75,7 +75,7 @@ namespace carSharing.deviceCarAction
         // }
         private static string getOTK(string MACID) {
             string response = "";
-            string otk_query =  "SELECT OTK, user_id from Permits INNER JOIN Devices ON Devices.MACID = @MACID" +
+            string otk_query =  "SELECT otkey, user_id from Permits INNER JOIN Devices ON Devices.MACID = @MACID" +
                                     "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id AND Vehicles.device_id = Devices.id";
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
@@ -83,7 +83,7 @@ namespace carSharing.deviceCarAction
                 command.Parameters.AddWithValue("@MACID", MACID);
                 using (SqlDataReader reader = command.ExecuteReader()) {               
                     if (reader.Read()) {
-                        response = (string)reader["user_id"] + (string)reader["OTK"];
+                        response = (string)reader["user_id"] + (string)reader["otkey"];
                     }
                 }
             conn.Close();
