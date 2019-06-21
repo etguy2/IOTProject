@@ -75,7 +75,7 @@ namespace carSharing.deviceCarAction
         // }
         private static string getOTK(string MACID) {
             string response = "";
-            string otk_query =  "SELECT otkey, user_id from Permits INNER JOIN Devices ON Devices.MACID = @MACID" +
+            string otk_query =  "SELECT otkey, user_id from Permits INNER JOIN Devices ON Devices.MACID = @MACID " +
                                     "INNER JOIN Vehicles ON Vehicles.id = Permits.vehicle_id AND Vehicles.device_id = Devices.id";
             using (SqlConnection conn = new SqlConnection(_conn_str)) {
                 conn.Open();
