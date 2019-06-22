@@ -50,7 +50,7 @@ namespace CarSharing.getReviews
                 command.Parameters.AddWithValue("@reviewee_id", reviewee_id);
                 double avg = (double)command.ExecuteScalar();
                 conn.Close();
-                return avg;
+                return Math.Round(avg, 1);
             }
         }
         private static List<Review> getReviewList(int reviewee_id) {
